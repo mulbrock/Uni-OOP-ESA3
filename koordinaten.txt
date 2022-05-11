@@ -1,0 +1,19 @@
+Menu
+x = 12
+y = 556
+
+Pause Button
+x = 917
+y = 576
+
+Upgrade Range / Laser Tower
+x = 32
+y = 576
+
+Upgrade Frequency / Bomb Tower
+x = 327
+y = 576
+
+Upgrade Power / Abreißen
+x = 622
+y = 576
