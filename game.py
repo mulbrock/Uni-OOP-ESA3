@@ -36,9 +36,9 @@ class Game:
 
             # Event handling
             m_pos = pygame.mouse.get_pos()
-            area = game_map.click_check(m_pos)
+            area = game_map.hover_check(m_pos)
             if area is not None:
-                win.blit(area["image"], area["A"])
+                win.blit(area.get_image(), area.get_a())
 
             for event in pygame.event.get():
                 if event.type == QUIT:
