@@ -45,7 +45,7 @@ class Game:
                     path.append(m_pos)
 
             for enemy in game_map.get_enemies():
-                win.blit(enemy.get_symbol(), enemy.get_pos())
+                win.blit(enemy.get_symbol(), enemy.get_center())
                 if not enemy.move_forward():
                     game_map.remove_enemy(enemy)
 

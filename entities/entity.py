@@ -23,7 +23,7 @@ class Entity(ABC):
 
     def set_center(self, pos):
         x, y = pos
-        self.center = x + (self.size[0] / 2), y + (self.size[1] / 2)
+        self.center = x - (self.size[0] / 2), y - (self.size[1] / 2)
 
     def get_pos(self):
         return self.position
