@@ -36,7 +36,6 @@ class Game:
 
             # Event handling
             m_pos = pygame.mouse.get_pos()
-
             for event in pygame.event.get():
                 if event.type == QUIT:
                     keep_going = False
@@ -52,4 +51,3 @@ class Game:
 
             # Redisplay
             pygame.display.update()
-
