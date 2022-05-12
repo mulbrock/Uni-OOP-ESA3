@@ -36,13 +36,16 @@ class Game:
 
             # Event handling
             m_pos = pygame.mouse.get_pos()
+            area = game_map.click_check(m_pos)
+            if area is not None:
+                win.blit(area["image"], area["A"])
+
             for event in pygame.event.get():
                 if event.type == QUIT:
                     keep_going = False
                     break
                 if event.type == MOUSEBUTTONDOWN:
-                    print("MOUSE")
-                    path.append(m_pos)
+                    print("click")
 
             for enemy in game_map.get_enemies():
                 win.blit(enemy.get_symbol(), enemy.get_center())
