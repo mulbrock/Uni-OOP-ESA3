@@ -3,11 +3,11 @@ import pygame
 
 
 class Entity(ABC):
-    symbol: pygame.image
 
-    def __init__(self, _size: tuple, pos: tuple):
+    def __init__(self, _size: tuple, pos: tuple, _symbol: pygame.image):
         self.size = _size
         self.position = pos
+        self.symbol = _symbol
         x, y = pos
         self.center = x + (self.size[0]/2), y + (self.size[1]/2)
 

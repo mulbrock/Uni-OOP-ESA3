@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 
 from utils.map import Map
+from entities.enemies.enemy_one import EnemyOne
 
 
 class Game:
@@ -16,6 +17,7 @@ class Game:
         # Entities
         game_map = Map("01")
         bg = game_map.get_bg()
+        en = EnemyOne
 
         # Action --> ALTER
         # Assign variables
