@@ -17,3 +17,35 @@ y = 576
 Upgrade Power / Abreißen
 x = 622
 y = 576
+
+Building Area 1
+x = 12	-> 162
+y = 149	-> 224
+
+Building Area 2
+x = 279	-> 479
+y = 56	-> 131
+
+Building Area 3
+x = 365	-> 490
+y = 210	-> 260
+
+Building Area 4
+x = 664	-> 814
+y = 156	-> 256
+
+Building Area 5
+x = 684	-> 734 
+y = 293	-> 343
+
+Building Area 6
+x = 322	-> 372
+y = 368	-> 493
+
+Building Area 7
+x = 469	-> 569
+y = 380	-> 430
+
+Building Area 8
+x = 825	-> 975
+y = 354	-> 454
