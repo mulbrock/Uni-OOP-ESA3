@@ -4,7 +4,9 @@ from entities.enemies.enemy import Enemy
 
 class EnemyOne(Enemy):
 
-    def __init__(self, _size: tuple, pos: tuple, _path, _hp):
+    def __init__(self, _path):
         symbol = pygame.image.load("assets/img/enemies/enemy-01.png")
-        super().__init__(_size, pos, _path, _hp, symbol)
+        size = symbol.get_size()
+        hp = 5
+        super().__init__(size, _path, hp, symbol)
 
