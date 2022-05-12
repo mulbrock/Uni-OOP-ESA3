@@ -30,13 +30,12 @@ class Game:
             win.blit(bg, (0, 0))
 
             # Event handling
+            m_pos = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == QUIT:
                     keep_going = False
                     break
                 if event.type == MOUSEBUTTONDOWN:
-                    print("MOUSE")
-
+                    print(m_pos)
             # Redisplay
             pygame.display.update()
-
