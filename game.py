@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 
 
 class Game:
@@ -24,6 +25,13 @@ class Game:
             clock.tick(45)
 
             # Event handling
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    keep_going = False
+                    break
+                if event.type == MOUSEBUTTONDOWN:
+                    print("MOUSE")
 
             # Redisplay
+            pygame.display.update()
 
