@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
 
+from utils.map import Map
+
 
 class Game:
 
@@ -12,6 +14,8 @@ class Game:
         pygame.display.set_caption("Tower Defense")
 
         # Entities
+        game_map = Map("01")
+        bg = game_map.get_bg()
 
         # Action --> ALTER
         # Assign variables
@@ -23,6 +27,7 @@ class Game:
 
             # Timer
             clock.tick(45)
+            win.blit(bg, (0, 0))
 
             # Event handling
             for event in pygame.event.get():
