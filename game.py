@@ -66,9 +66,15 @@ class Game:
                                     area.add_building(self.tower_to_build)
                                     self.building_mode = False
 
+            self.activate_towers()
+
             self.draw_entities(self.win)
             # Redisplay
             pygame.display.update()
+
+    def activate_towers(self):
+        for tower in self.game_map.get_all_towers():
+            tower.set_aimed_enemy(self.game_map.get_enemies())
 
     def draw_entities(self, win):
         self.draw_enemies(win)
@@ -78,12 +84,14 @@ class Game:
     def draw_enemies(self, win):
         for enemy in self.game_map.get_enemies():
             win.blit(enemy.get_symbol(), enemy.get_draw_pos())
+            enemy.draw_life(win)
             if not enemy.move_forward():
                 self.game_map.remove_enemy(enemy)
 
     def draw_towers(self, win):
         for tower in self.game_map.get_all_towers():
             win.blit(tower.get_symbol(), tower.get_draw_pos())
+            tower.draw_attack(win)
 
     def draw_tower_to_build(self, win):
         if self.tower_to_build is not None and self.building_mode:

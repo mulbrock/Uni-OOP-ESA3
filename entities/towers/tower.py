@@ -31,10 +31,15 @@ class Tower(Entity):
         :return:
         """
         for enemy in enemy_list:
-            if self.is_in_range(enemy.get_pos().get_position()):
+            if self.is_in_range(enemy.get_center()):
                 self.active = True
                 self.aimed_enemy = enemy
                 break
             else:
                 self.active = False
                 self.aimed_enemy = None
+
+    def draw_attack(self, win):
+        if self.aimed_enemy is not None:
+            pos = self.aimed_enemy.get_center()
+            pygame.draw.line(win, (0, 0, 255), self.get_center(), pos, 2)
