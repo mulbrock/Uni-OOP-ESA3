@@ -77,7 +77,7 @@ class Game:
 
     def draw_enemies(self, win):
         for enemy in self.game_map.get_enemies():
-            win.blit(enemy.get_symbol(), enemy.get_center())
+            win.blit(enemy.get_symbol(), enemy.get_draw_pos())
             if not enemy.move_forward():
                 self.game_map.remove_enemy(enemy)
 
