@@ -1,53 +1,92 @@
+import math
+
 import pygame
 from pygame.locals import *
 
 from utils.map import Map
 from entities.enemies.enemy_one import EnemyOne
+from entities.towers.laser import LaserTower
 
 
 class Game:
 
-    def start(self):
+    def __init__(self):
         pygame.init()
+        self.win = pygame.display.set_mode((1024, 768))
+        pygame.display.set_caption("Tower Defense")
+        self.game_map = Map("01")
+        self.building_mode = False
+        self.tower_to_build = None
+
+    def start(self):
 
         # Display config
-        win = pygame.display.set_mode((1024, 768))
-        pygame.display.set_caption("Tower Defense")
 
         # Entities
-        game_map = Map("01")
-        bg = game_map.get_bg()
-        en = EnemyOne(game_map.get_path())
-        game_map.add_enemy(en)
+        bg = self.game_map.get_bg()
+        en = EnemyOne(self.game_map.get_path())
+        self.game_map.add_enemy(en)
 
         # Action --> ALTER
         # Assign variables
         keep_going = True
         clock = pygame.time.Clock()
 
-        path = list()
-
         # Loop
         while keep_going:
 
             # Timer
             clock.tick(90)
-            win.blit(bg, (0, 0))
+            self.win.blit(bg, (0, 0))
 
             # Event handling
             m_pos = pygame.mouse.get_pos()
+            area = self.game_map.hover_check(m_pos)
+            if area is not None:
+                self.win.blit(area.get_image(), area.get_a())
+
+            if self.building_mode:
+                self.tower_to_build = LaserTower(m_pos)
+
             for event in pygame.event.get():
                 if event.type == QUIT:
                     keep_going = False
                     break
                 if event.type == MOUSEBUTTONDOWN:
-                    print("MOUSE")
-                    path.append(m_pos)
+                    left, middle, right = pygame.mouse.get_pressed()
 
-            for enemy in game_map.get_enemies():
-                win.blit(enemy.get_symbol(), enemy.get_center())
-                if not enemy.move_forward():
-                    game_map.remove_enemy(enemy)
+                    if right:
+                        self.building_mode = True
+                        self.tower_to_build = LaserTower(m_pos)
+                    elif left and self.building_mode:
+                        for area in self.game_map.get_building_areas():
+                            print(area.is_tower_in_building_area(self.tower_to_build))
+                            if area.is_tower_in_building_area(self.tower_to_build):
+                                if area.is_building_space_empty(self.tower_to_build):
+                                    area.add_building(self.tower_to_build)
+                                    self.building_mode = False
 
+            self.draw_entities(self.win)
             # Redisplay
             pygame.display.update()
+
+    def draw_entities(self, win):
+        self.draw_enemies(win)
+        self.draw_towers(win)
+        self.draw_tower_to_build(win)
+
+    def draw_enemies(self, win):
+        for enemy in self.game_map.get_enemies():
+            win.blit(enemy.get_symbol(), enemy.get_center())
+            if not enemy.move_forward():
+                self.game_map.remove_enemy(enemy)
+
+    def draw_towers(self, win):
+        for tower in self.game_map.get_all_towers():
+            win.blit(tower.get_symbol(), tower.get_draw_pos())
+
+    def draw_tower_to_build(self, win):
+        if self.tower_to_build is not None and self.building_mode:
+
+            win.blit(self.tower_to_build.get_symbol(), self.tower_to_build.get_draw_pos())
+
