@@ -6,7 +6,6 @@ class EnemyOne(Enemy):
 
     def __init__(self, _path):
         symbol = pygame.image.load("assets/img/enemies/enemy_1.png")
-        size = symbol.get_size()
         hp = 5
-        super().__init__(size, _path, hp, symbol)
+        super().__init__(_path, hp, symbol)
 

@@ -4,8 +4,8 @@ from entities.entity import Entity
 
 class Enemy(Entity):
 
-    def __init__(self, _size: tuple, _path, _hp, _symbol):
-        super().__init__(_size, _path[0], _symbol)
+    def __init__(self, _path, _hp, _symbol):
+        super().__init__(_path[0], _symbol)
 
         self.max_hp = _hp
         self.hp = _hp
@@ -16,7 +16,7 @@ class Enemy(Entity):
         self.step_count = 0
 
     def move_forward(self):
-        x1, y1 = self.get_pos()
+        x1, y1 = self.get_center()
 
         if self.path_stage + 1 < len(self.path):
             x2, y2 = self.path[self.path_stage + 1]
@@ -29,8 +29,8 @@ class Enemy(Entity):
 
         step = ((x1 + dir_vector[0]), (y1 + dir_vector[1]))
 
-        self.set_pos((step[0], step[1]))
-        x1, y1 = self.get_pos()
+        self.set_center((step[0], step[1]))
+        x1, y1 = self.get_center()
 
         if dir_vector[0] >= 0:
             if dir_vector[1] >= 0:
