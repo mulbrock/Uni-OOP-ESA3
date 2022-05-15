@@ -83,23 +83,10 @@ class Game:
 
     def draw_towers(self, win):
         for tower in self.game_map.get_all_towers():
-            win.blit(tower.get_symbol(), tower.get_center())
+            win.blit(tower.get_symbol(), tower.get_draw_pos())
 
     def draw_tower_to_build(self, win):
         if self.tower_to_build is not None and self.building_mode:
-            left = self.tower_to_build.get_center()[0]
-            top = self.tower_to_build.get_center()[1]
-            area = self.tower_to_build.get_area()
-            a = area["A"]
-            b = area["B"]
-            c = area["C"]
-            ab = b[0] - a[0], b[1] - a[1]
-            bc = c[0] - b[0], c[1] - b[1]
 
-            ab_length = math.sqrt((ab[0]) ** 2 + (ab[1]) ** 2)
-            bc_length = math.sqrt((bc[0]) ** 2 + (bc[1]) ** 2)
-
-            rect = pygame.Rect(left, top, ab_length, bc_length)
-            pygame.draw.rect(win, "red", rect)
-            #win.blit(self.tower_to_build.get_symbol(), self.tower_to_build.get_center())
+            win.blit(self.tower_to_build.get_symbol(), self.tower_to_build.get_draw_pos())
 

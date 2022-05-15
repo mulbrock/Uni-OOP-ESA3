@@ -1,14 +1,15 @@
 from abc import ABC
 import pygame
 
+
 class Entity(ABC):
 
     def __init__(self, _pos: tuple, _symbol: pygame.image):
         self.size = _symbol.get_size()
         self.symbol = _symbol
-        self.center = _pos[0] - _symbol.get_size()[0]/2, _pos[1] - _symbol.get_size()[1]/2
+        self.center = _pos
+        self.draw_pos = self.center[0] - self.size[0] / 2, self.center[1] - self.size[1] / 2
 
-        self.draw_pos = self.center[0] - self.size[0]/2, self.center[1] - self.size[1]/2
         self.area = {}
         self.set_area()
 
@@ -20,6 +21,9 @@ class Entity(ABC):
     def get_symbol(self):
         return self.symbol
 
+    def get_draw_pos(self):
+        return self.draw_pos
+
     def get_size(self):
         return self.size
 
@@ -28,11 +32,7 @@ class Entity(ABC):
 
     def set_center(self, center_pos):
         self.center = center_pos
-        x, y = self.center
-        self.draw_pos = x - (self.size[0] / 2), y - (self.size[1] / 2)
-
-    def get_draw_pos(self):
-        return self.draw_pos
+        self.draw_pos = self.center[0] - self.size[0] / 2, self.center[1] - self.size[1] / 2
 
     def is_pos_in_area(self, pos):
         x, y = pos
