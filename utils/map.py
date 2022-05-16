@@ -14,7 +14,6 @@ class Map:
         self.building_areas.append(area_one)
         self.building_areas.append(area_two)
 
-
     def get_bg(self):
         return self.bg
 
