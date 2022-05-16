@@ -8,6 +8,7 @@ from entities.enemies.enemy_one import EnemyOne
 from entities.enemies.enemy_two import EnemyTwo
 from entities.enemies.enemy_three import EnemyThree
 from entities.towers.laser import LaserTower
+from entities.towers.bomb import BombTower
 
 
 class Game:
@@ -20,9 +21,11 @@ class Game:
         self.building_mode = False
         self.tower_to_build = None
 
+        self.impacted_projectiles = list()
+
         self.timer = time.time()
-        self.spawn_cool_down = 2.0
-        self.cast_cool_down = 2.0
+        self.spawn_cool_down = 0.5
+        self.generate_enemies_cool_down = 2.0
 
         self.enemies_to_enter = list()
         self.wave = 1
@@ -40,6 +43,7 @@ class Game:
         self.generate_enemies()
         self.enemies_to_enter.reverse()
 
+
         # Action --> ALTER
         # Assign variables
         keep_going = True
@@ -49,7 +53,7 @@ class Game:
         while keep_going:
 
             # Timer
-            clock.tick(200)
+            clock.tick(90)
             self.win.blit(bg, (0, 0))
 
             # Event handling
@@ -59,16 +63,13 @@ class Game:
             if time.time() - self.timer >= self.spawn_cool_down and len(self.enemies_to_enter) > 0:
                 self.spawn_enemies()
                 self.timer = time.time()
-            elif time.time() - self.timer >= self.cast_cool_down:
+            elif time.time() - self.timer >= self.generate_enemies_cool_down:
                 self.timer = time.time()
                 self.generate_enemies()
                 self.enemies_to_enter.reverse()
 
             if area is not None:
                 self.win.blit(area.get_image(), area.get_a())
-
-            if self.building_mode:
-                self.tower_to_build = LaserTower(m_pos)
 
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -77,8 +78,8 @@ class Game:
                 if event.type == MOUSEBUTTONDOWN:
                     left, middle, right = pygame.mouse.get_pressed()
 
-                    if right and self.building_mode == True:
-                        self.tower_to_build = LaserTower(m_pos)
+                    if right and self.building_mode:
+                        self.tower_to_build = BombTower(m_pos)
                     elif right and not self.building_mode:
                         self.building_mode = True
                         self.tower_to_build = LaserTower(m_pos)
@@ -90,21 +91,30 @@ class Game:
                                     self.building_mode = False
 
             self.handle_tower_attack()
-
+            self.handle_bomb_impacts()
             self.draw_entities(self.win)
             # Redisplay
             pygame.display.update()
-
-    def handle_tower_attack(self):
-        for tower in self.game_map.get_all_towers():
-            tower.set_aimed_enemy(self.game_map.get_enemies())
-            if tower.attack():
-                tower.draw_attack(self.win)
 
     def draw_entities(self, win):
         self.draw_enemies(win)
         self.draw_towers(win)
         self.draw_tower_to_build(win)
+
+    def handle_tower_attack(self):
+        for tower in self.game_map.get_all_towers():
+            tower.set_aimed_enemy(self.game_map.get_enemies())
+            if tower.__class__ == BombTower:
+                tower.attack()
+                tower.draw_attack(self.win)
+                self.impacted_projectiles.extend(tower.get_impacted_projectiles())
+            elif tower.attack():
+                tower.draw_attack(self.win)
+
+    def handle_bomb_impacts(self):
+        for projectile in self.impacted_projectiles:
+            projectile.handle_impact(self.game_map.get_enemies())
+        self.impacted_projectiles = list()
 
     def draw_enemies(self, win):
         for enemy in self.game_map.get_enemies():
@@ -123,7 +133,6 @@ class Game:
 
     def draw_tower_to_build(self, win):
         if self.tower_to_build is not None and self.building_mode:
-
             win.blit(self.tower_to_build.get_symbol(), self.tower_to_build.get_draw_pos())
 
     def spawn_enemies(self):

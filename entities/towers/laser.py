@@ -1,5 +1,4 @@
 import pygame
-import math
 import time
 from entities.towers.tower import Tower
 
@@ -10,8 +9,7 @@ class LaserTower(Tower):
         _symbol = pygame.image.load("assets/img/towers/laser_1.png")
         _range = 100
         _cool_down = 1.0
-        super().__init__(pos, _symbol, _range, _cool_down)
-        self.attack_power = 1
+        super().__init__(pos, _symbol, _range, _cool_down, 1)
 
     def attack(self):
         if self.active:
@@ -20,3 +18,8 @@ class LaserTower(Tower):
                 self.aimed_enemy.lose_life(self.attack_power)
                 return True
         return False
+
+    def draw_attack(self, win):
+        if self.aimed_enemy is not None:
+            pos = self.aimed_enemy.get_center()
+            pygame.draw.line(win, (0, 0, 255), self.get_center(), pos, 2)
