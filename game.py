@@ -13,10 +13,8 @@ from entities.towers.bomb import BombTower
 
 class Game:
 
-    def __init__(self):
-        pygame.init()
-        self.win = pygame.display.set_mode((1024, 768))
-        pygame.display.set_caption("Tower Defense")
+    def __init__(self, win):
+        self.win = win
         self.game_map = Map("01")
 
         self.building_mode = False
