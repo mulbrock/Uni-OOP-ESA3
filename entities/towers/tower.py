@@ -6,14 +6,18 @@ from entities.entity import Entity
 
 class Tower(Entity):
 
-    def __init__(self, _pos: tuple, _symbol: pygame.image, _range, _cool_down, _attack_power):
+    def __init__(self, _pos: tuple, _symbol: pygame.image, _range, _cool_down, _attack_power, _cost):
         super().__init__(_pos, _symbol)
+
+        self.build_cost = _cost
+
         self.range = _range
-        self.timer = time.time()
         self.cool_down_time = _cool_down
+        self.attack_power = _attack_power
+
+        self.timer = time.time()
         self.aimed_enemy = None
         self.active = False
-        self.attack_power = _attack_power
 
     def is_in_range(self, pos):
         x1, y1 = pos
