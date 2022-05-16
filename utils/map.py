@@ -47,3 +47,8 @@ class Map:
             l = area.get_buildings()
             towers.extend(l)
         return towers
+
+    def remove_tower(self, tower):
+        for area in self.building_areas:
+            if area.has_tower(tower):
+                area.remove_tower(tower)

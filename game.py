@@ -81,6 +81,16 @@ class Game:
                 if event.type == MOUSEBUTTONDOWN:
                     left, middle, right = pygame.mouse.get_pressed()
 
+                    # DELETE TOWER
+                    if middle:
+                        for t in self.game_map.get_all_towers():
+                            if t.click_check(m_pos):
+                                self.remove_tower(t)
+                                if self.selected_tower == t:
+                                    self.selected_tower = None
+                                break
+
+                    # Building Mode stuff
                     if right and self.building_mode:
                         self.tower_to_build = BombTower(m_pos)
 
@@ -100,8 +110,9 @@ class Game:
                             if tower.click_check(m_pos):
                                 self.selected_tower = tower
                                 break
-                        if not self.selected_tower.click_check(m_pos):
-                            self.selected_tower = None
+                        if self.selected_tower is not None:
+                            if not self.selected_tower.click_check(m_pos):
+                                self.selected_tower = None
 
             self.show_selected_tower()
             self.handle_tower_attack()
@@ -175,3 +186,6 @@ class Game:
     def show_selected_tower(self):
         if self.selected_tower is not None:
             self.selected_tower.draw_range(self.win)
+
+    def remove_tower(self, tower):
+        self.game_map.remove_tower(tower)
