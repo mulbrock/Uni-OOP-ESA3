@@ -48,3 +48,15 @@ class Tower(Entity):
 
     def attack(self):
         raise NotImplementedError
+
+    def upgrade_range(self):
+        self.range += 5
+
+    def upgrade_power(self):
+        self.attack_power += 1
+
+    def upgrade_speed(self):
+        self.cool_down_time -= 0.01
+
+    def draw_range(self, win):
+        pygame.draw.circle(win, [0, 200, 200, 50], self.get_center(), self.range, 2)

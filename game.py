@@ -18,8 +18,10 @@ class Game:
         self.win = pygame.display.set_mode((1024, 768))
         pygame.display.set_caption("Tower Defense")
         self.game_map = Map("01")
+
         self.building_mode = False
         self.tower_to_build = None
+        self.selected_tower = None
 
         self.impacted_projectiles = list()
 
@@ -71,6 +73,7 @@ class Game:
             if area is not None:
                 self.win.blit(area.get_image(), area.get_a())
 
+            # Mouse clicks
             for event in pygame.event.get():
                 if event.type == QUIT:
                     keep_going = False
@@ -80,9 +83,11 @@ class Game:
 
                     if right and self.building_mode:
                         self.tower_to_build = BombTower(m_pos)
+
                     elif right and not self.building_mode:
                         self.building_mode = True
                         self.tower_to_build = LaserTower(m_pos)
+
                     elif left and self.building_mode:
                         for area in self.game_map.get_building_areas():
                             if area.is_tower_in_building_area(self.tower_to_build):
@@ -90,6 +95,15 @@ class Game:
                                     area.add_building(self.tower_to_build)
                                     self.building_mode = False
 
+                    elif left and not self.building_mode:
+                        for tower in self.game_map.get_all_towers():
+                            if tower.click_check(m_pos):
+                                self.selected_tower = tower
+                                break
+                        if not self.selected_tower.click_check(m_pos):
+                            self.selected_tower = None
+
+            self.show_selected_tower()
             self.handle_tower_attack()
             self.handle_bomb_impacts()
             self.draw_entities(self.win)
@@ -157,3 +171,7 @@ class Game:
                 enemy = EnemyOne(self.game_map.get_path())
                 enemy.increase_max_hp_by(self.wave * 2)
             self.enemies_to_enter.append(enemy)
+
+    def show_selected_tower(self):
+        if self.selected_tower is not None:
+            self.selected_tower.draw_range(self.win)

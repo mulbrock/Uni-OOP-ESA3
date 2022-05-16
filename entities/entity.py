@@ -44,6 +44,9 @@ class Entity(ABC):
             if y1 <= y <= y2:
                 return True
 
+    def click_check(self, pos):
+        return self.is_pos_in_area(pos)
+
     def get_area(self):
         return self.area
 
