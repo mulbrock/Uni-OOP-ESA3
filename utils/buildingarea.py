@@ -81,3 +81,11 @@ class BuildingArea:
 
     def get_number(self):
         return self.number
+
+    def has_tower(self, tower):
+        for t in self.buildings:
+            if t == tower:
+                return True
+
+    def remove_tower(self, tower):
+        self.buildings.remove(tower)
