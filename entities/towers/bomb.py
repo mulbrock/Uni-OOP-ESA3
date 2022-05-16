@@ -12,7 +12,8 @@ class BombTower(Tower):
         _range = 150
         _cool_down = 3.0
         _attack_power = 1
-        super().__init__(_pos, _symbol, _range, _cool_down, _attack_power)
+        _cost = 10
+        super().__init__(_pos, _symbol, _range, _cool_down, _attack_power, _cost)
 
         self.projectiles = list()
         self.position_to_attack = (0, 0)

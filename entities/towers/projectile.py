@@ -6,7 +6,7 @@ from entities.entity import Entity
 class Projectile(Entity):
 
     def __init__(self, starting_pos, dest_pos, attack_power):
-        _symbol = pygame.image.load("assets/img/projectiles/projectile_9.png")
+        _symbol = pygame.image.load("assets/img/projectiles/projectile_1.png")
         super().__init__(starting_pos, _symbol)
         self.destination_pos = dest_pos
         self.impact_range = 60
@@ -64,3 +64,5 @@ class Projectile(Entity):
             if self.is_in_impact_range(enemy.get_center()):
                 enemy.lose_life(self.attack_power)
 
+    def set_projectile_img(self, symbol_path):
+        self.set_symbol(symbol_path)

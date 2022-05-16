@@ -6,14 +6,26 @@ from entities.entity import Entity
 
 class Tower(Entity):
 
-    def __init__(self, _pos: tuple, _symbol: pygame.image, _range, _cool_down, _attack_power):
+    def __init__(self, _pos: tuple, _symbol: pygame.image, _range, _cool_down, _attack_power, _cost):
         super().__init__(_pos, _symbol)
+
+        self.build_cost = _cost
+
         self.range = _range
-        self.timer = time.time()
+        self.range_upgrade_level = 0
+        self.range_upgrade_cost = 1
+
         self.cool_down_time = _cool_down
+        self.speed_upgrade_level = 0
+        self.speed_upgrade_cost = 1
+
+        self.attack_power = _attack_power
+        self.attack_power_upgrade_level = 0
+        self.attack_power_upgrade_cost = 1
+
+        self.timer = time.time()
         self.aimed_enemy = None
         self.active = False
-        self.attack_power = _attack_power
 
     def is_in_range(self, pos):
         x1, y1 = pos
@@ -44,3 +56,30 @@ class Tower(Entity):
 
     def attack(self):
         raise NotImplementedError
+
+    def upgrade_range(self):
+        self.range += 5
+        self.range_upgrade_level += 1
+        self.range_upgrade_cost += 2
+
+    def get_upgrade_range_cost(self):
+        return self.range_upgrade_cost
+
+    def upgrade_power(self):
+        self.attack_power += 1
+        self.attack_power_upgrade_level += 1
+        self.attack_power_upgrade_cost += 2
+
+    def get_upgrade_power_cost(self):
+        return self.attack_power_upgrade_cost
+
+    def upgrade_speed(self):
+        self.cool_down_time -= 0.01
+        self.speed_upgrade_level += 1
+        self.speed_upgrade_cost += 2
+
+    def get_upgrade_cost(self):
+        return self.speed_upgrade_cost
+
+    def draw_range(self, win):
+        pygame.draw.circle(win, [0, 200, 200, 50], self.get_center(), self.range, 2)

@@ -8,8 +8,10 @@ class LaserTower(Tower):
     def __init__(self, pos: tuple):
         _symbol = pygame.image.load("assets/img/towers/laser_1.png")
         _range = 100
-        _cool_down = 1.0
-        super().__init__(pos, _symbol, _range, _cool_down, 1)
+        _cool_down = 2.0
+        _attack_power = 1
+        _cost = 4
+        super().__init__(pos, _symbol, _range, _cool_down, _attack_power, _cost)
 
     def attack(self):
         if self.active:
