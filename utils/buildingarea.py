@@ -3,7 +3,6 @@ import pygame.image
 from entities.towers.tower import Tower
 
 
-
 class BuildingArea:
 
     def __init__(self, area_number, _a, _b, _c, _d):
@@ -89,3 +88,6 @@ class BuildingArea:
 
     def remove_tower(self, tower):
         self.buildings.remove(tower)
+
+    def hover_check(self, pos):
+        return self.is_point_in_building_area(pos)
