@@ -20,6 +20,7 @@ class Game:
         self.game_map = Map("01")
 
         self.building_mode = False
+        self.active_building_area = None
         self.tower_to_build = None
         self.selected_tower = None
 
@@ -32,7 +33,7 @@ class Game:
         self.enemies_to_enter = list()
         self.wave = 1
 
-        #stats
+        # Stats
         self.money = 20
         self.lives = 20
 
@@ -44,7 +45,7 @@ class Game:
         bg = self.game_map.get_bg()
         self.generate_enemies()
         self.enemies_to_enter.reverse()
-
+        building_areas = self.game_map.get_building_areas()
 
         # Action --> ALTER
         # Assign variables
@@ -58,10 +59,7 @@ class Game:
             clock.tick(90)
             self.win.blit(bg, (0, 0))
 
-            # Event handling
-            m_pos = pygame.mouse.get_pos()
-            area = self.game_map.hover_check(m_pos)
-
+            # Enemies: Spawn and Creation
             if time.time() - self.timer >= self.spawn_cool_down and len(self.enemies_to_enter) > 0:
                 self.spawn_enemies()
                 self.timer = time.time()
@@ -70,8 +68,13 @@ class Game:
                 self.generate_enemies()
                 self.enemies_to_enter.reverse()
 
-            if area is not None:
+            # Event handling
+            m_pos = pygame.mouse.get_pos()
+            self.active_building_area = None
+            for area in building_areas:
                 self.win.blit(area.get_image(), area.get_a())
+                if area.hover_check(m_pos):
+                    self.active_building_area = area
 
             # Mouse clicks
             for event in pygame.event.get():
@@ -99,12 +102,14 @@ class Game:
                         self.tower_to_build = LaserTower(m_pos)
 
                     elif left and self.building_mode:
-                        for area in self.game_map.get_building_areas():
-                            if area.is_tower_in_building_area(self.tower_to_build):
-                                if area.is_building_space_empty(self.tower_to_build):
-                                    area.add_building(self.tower_to_build)
+                        if self.active_building_area is not None:
+
+                            if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
+                                if self.active_building_area.is_building_space_empty(self.tower_to_build):
+                                    self.active_building_area.add_building(self.tower_to_build)
                                     self.building_mode = False
 
+                    # Click detection, if mouse-position is on tower
                     elif left and not self.building_mode:
                         for tower in self.game_map.get_all_towers():
                             if tower.click_check(m_pos):
@@ -118,6 +123,7 @@ class Game:
             self.handle_tower_attack()
             self.handle_bomb_impacts()
             self.draw_entities(self.win)
+
             # Redisplay
             pygame.display.update()
 

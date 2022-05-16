@@ -88,3 +88,6 @@ class BuildingArea:
 
     def remove_tower(self, tower):
         self.buildings.remove(tower)
+
+    def hover_check(self, pos):
+        return self.is_point_in_building_area(pos)
