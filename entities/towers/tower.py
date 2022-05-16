@@ -6,13 +6,14 @@ from entities.entity import Entity
 
 class Tower(Entity):
 
-    def __init__(self, _pos: tuple, _symbol: pygame.image, _range, _cool_down):
+    def __init__(self, _pos: tuple, _symbol: pygame.image, _range, _cool_down, _attack_power):
         super().__init__(_pos, _symbol)
         self.range = _range
         self.timer = time.time()
         self.cool_down_time = _cool_down
         self.aimed_enemy = None
         self.active = False
+        self.attack_power = _attack_power
 
     def is_in_range(self, pos):
         x1, y1 = pos
@@ -39,9 +40,7 @@ class Tower(Entity):
         self.aimed_enemy = None
 
     def draw_attack(self, win):
-        if self.aimed_enemy is not None:
-            pos = self.aimed_enemy.get_center()
-            pygame.draw.line(win, (0, 0, 255), self.get_center(), pos, 2)
+        raise NotImplementedError
 
     def attack(self):
         raise NotImplementedError
