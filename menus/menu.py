@@ -26,3 +26,6 @@ class Menu:
 
     def get_vertical_padding(self):
         return self.vertical_padding
+
+    def get_draw_pos(self):
+        return self.draw_pos

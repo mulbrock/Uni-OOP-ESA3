@@ -60,7 +60,9 @@ class MainMenu(Menu):
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.menu_shown = False
-                    break
+                    if self.current_game is not None:
+                        self.current_game.end_game()
+                    exit(0)
                 if event.type == MOUSEBUTTONDOWN:
                     left, middle, right = pygame.mouse.get_pressed()
                     if left:
@@ -72,7 +74,8 @@ class MainMenu(Menu):
             pygame.display.update()
 
     def new_game_button_clicked(self):
-        self.current_game = Game(self.win)
+        self.current_game = None
+        self.current_game = Game(self.win, self)
         self.menu_shown = False
         self.current_game.start()
 
@@ -80,8 +83,11 @@ class MainMenu(Menu):
         if self.current_game is None:
             print("No game running")
         else:
-            print("resume game")
+            self.current_game.resume_game()
             self.menu_shown = False
 
     def save_game_clicked(self):
         print("save")
+
+    def end_game(self):
+        self.menu_shown = False

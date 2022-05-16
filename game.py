@@ -9,11 +9,12 @@ from entities.enemies.enemy_two import EnemyTwo
 from entities.enemies.enemy_three import EnemyThree
 from entities.towers.laser import LaserTower
 from entities.towers.bomb import BombTower
+from menus.ingame_menu import IngameMenu
 
 
 class Game:
 
-    def __init__(self, win):
+    def __init__(self, win, main_menu):
         self.win = win
         self.game_map = Map("01")
 
@@ -31,9 +32,20 @@ class Game:
         self.enemies_to_enter = list()
         self.wave = 1
 
+        self.main_menu = main_menu
+
+        # Ingame Menu positioning
+        self.ingame_menu = IngameMenu()
+        menu_pos = self.win.get_width()/2 - self.ingame_menu.get_width()/2, \
+                   self.win.get_height() - self.ingame_menu.get_height()
+        self.ingame_menu.set_draw_pos(menu_pos)
+
         # Stats
         self.money = 20
         self.lives = 20
+
+        self.keep_going = True
+        self.pause = False
 
     def start(self):
 
@@ -47,80 +59,87 @@ class Game:
 
         # Action --> ALTER
         # Assign variables
-        keep_going = True
         clock = pygame.time.Clock()
 
         # Loop
-        while keep_going:
+        while self.keep_going:
 
-            # Timer
-            clock.tick(90)
-            self.win.blit(bg, (0, 0))
+            if self.pause:
+                self.main_menu.show_menu()
+            else:
+                # Timer
+                clock.tick(90)
+                self.win.blit(bg, (0, 0))
 
-            # Enemies: Spawn and Creation
-            if time.time() - self.timer >= self.spawn_cool_down and len(self.enemies_to_enter) > 0:
-                self.spawn_enemies()
-                self.timer = time.time()
-            elif time.time() - self.timer >= self.generate_enemies_cool_down:
-                self.timer = time.time()
-                self.generate_enemies()
-                self.enemies_to_enter.reverse()
+                # Enemies: Spawn and Creation
+                if time.time() - self.timer >= self.spawn_cool_down and len(self.enemies_to_enter) > 0:
+                    self.spawn_enemies()
+                    self.timer = time.time()
+                elif time.time() - self.timer >= self.generate_enemies_cool_down:
+                    self.timer = time.time()
+                    self.generate_enemies()
+                    self.enemies_to_enter.reverse()
 
-            # Event handling
-            m_pos = pygame.mouse.get_pos()
-            self.active_building_area = None
-            for area in building_areas:
-                self.win.blit(area.get_image(), area.get_a())
-                if area.hover_check(m_pos):
-                    self.active_building_area = area
+                # Event handling
+                m_pos = pygame.mouse.get_pos()
+                self.active_building_area = None
+                for area in building_areas:
+                    self.win.blit(area.get_image(), area.get_a())
+                    if area.hover_check(m_pos):
+                        self.active_building_area = area
 
-            # Mouse clicks
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    keep_going = False
-                    break
-                if event.type == MOUSEBUTTONDOWN:
-                    left, middle, right = pygame.mouse.get_pressed()
+                # Mouse clicks
+                for event in pygame.event.get():
+                    if event.type == QUIT:
+                        self.keep_going = False
+                        self.main_menu.end_game()
+                        exit(0)
+                    if event.type == MOUSEBUTTONDOWN:
+                        left, middle, right = pygame.mouse.get_pressed()
 
-                    # DELETE TOWER
-                    if middle:
-                        for t in self.game_map.get_all_towers():
-                            if t.click_check(m_pos):
-                                self.remove_tower(t)
-                                if self.selected_tower == t:
-                                    self.selected_tower = None
-                                break
+                        # DELETE TOWER
+                        if middle:
+                            for t in self.game_map.get_all_towers():
+                                if t.click_check(m_pos):
+                                    self.remove_tower(t)
+                                    if self.selected_tower == t:
+                                        self.selected_tower = None
+                                    break
 
-                    # Building Mode stuff
-                    if right and self.building_mode:
-                        self.tower_to_build = BombTower(m_pos)
+                        # Building Mode stuff
+                        if right and self.building_mode:
+                            self.tower_to_build = BombTower(m_pos)
 
-                    elif right and not self.building_mode:
-                        self.building_mode = True
-                        self.tower_to_build = LaserTower(m_pos)
+                        elif right and not self.building_mode:
+                            self.building_mode = True
+                            self.tower_to_build = LaserTower(m_pos)
 
-                    elif left and self.building_mode:
-                        if self.active_building_area is not None:
+                        elif left and self.building_mode:
+                            if self.active_building_area is not None:
 
-                            if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
-                                if self.active_building_area.is_building_space_empty(self.tower_to_build):
-                                    self.active_building_area.add_building(self.tower_to_build)
-                                    self.building_mode = False
+                                if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
+                                    if self.active_building_area.is_building_space_empty(self.tower_to_build):
+                                        self.active_building_area.add_building(self.tower_to_build)
+                                        self.building_mode = False
 
-                    # Click detection, if mouse-position is on tower
-                    elif left and not self.building_mode:
-                        for tower in self.game_map.get_all_towers():
-                            if tower.click_check(m_pos):
-                                self.selected_tower = tower
-                                break
-                        if self.selected_tower is not None:
-                            if not self.selected_tower.click_check(m_pos):
-                                self.selected_tower = None
+                        # Click detection, if mouse-position is on tower
+                        elif left and not self.building_mode:
+                            if self.ingame_menu.click_check(m_pos):
+                                self.pause = True
+                            else:
+                                for tower in self.game_map.get_all_towers():
+                                    if tower.click_check(m_pos):
+                                        self.selected_tower = tower
+                                        break
+                                if self.selected_tower is not None:
+                                    if not self.selected_tower.click_check(m_pos):
+                                        self.selected_tower = None
 
-            self.show_selected_tower()
-            self.handle_tower_attack()
-            self.handle_bomb_impacts()
-            self.draw_entities(self.win)
+                self.draw_ingame_menu()
+                self.show_selected_tower()
+                self.handle_tower_attack()
+                self.handle_bomb_impacts()
+                self.draw_entities(self.win)
 
             # Redisplay
             pygame.display.update()
@@ -193,3 +212,13 @@ class Game:
 
     def remove_tower(self, tower):
         self.game_map.remove_tower(tower)
+
+    def draw_ingame_menu(self):
+        self.win.blit(self.ingame_menu.get_symbol(), self.ingame_menu.get_draw_pos())
+
+    def resume_game(self):
+        self.pause = False
+
+    def end_game(self):
+        self.pause = False
+        self.keep_going = False
