@@ -1,5 +1,7 @@
 import pygame
 from pygame.locals import *
+
+from game import Game
 from menus.menu import Menu
 from menus.buttons.button import Button
 
@@ -17,7 +19,10 @@ class MainMenu(Menu):
                    (self.win.get_height()/2) - (background.get_height()/2)
 
         super().__init__(draw_pos, background)
+
+        self.current_game = None
         self.init_buttons()
+        self.menu_shown = True
 
     def init_buttons(self):
         new_game_button = Button("btn_bombbuild")
@@ -40,16 +45,12 @@ class MainMenu(Menu):
         save_game.click = lambda: self.save_game_clicked()
         self.add_button(save_game)
 
-
-
-
-
     def get_window(self):
         return self.win
 
     def show_menu(self):
-        keep_going = True
-        while keep_going:
+        self.menu_shown = True
+        while self.menu_shown:
            # self.win.blit(self.background, self.draw_pos)
 
             m_pos = pygame.mouse.get_pos()
@@ -58,7 +59,7 @@ class MainMenu(Menu):
 
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    keep_going = False
+                    self.menu_shown = False
                     break
                 if event.type == MOUSEBUTTONDOWN:
                     left, middle, right = pygame.mouse.get_pressed()
@@ -71,10 +72,16 @@ class MainMenu(Menu):
             pygame.display.update()
 
     def new_game_button_clicked(self):
-        print("new game")
+        self.current_game = Game(self.win)
+        self.menu_shown = False
+        self.current_game.start()
 
     def resume_game_button_clicked(self):
-        print("resume")
+        if self.current_game is None:
+            print("No game running")
+        else:
+            print("resume game")
+            self.menu_shown = False
 
     def save_game_clicked(self):
         print("save")
