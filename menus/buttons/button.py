@@ -6,6 +6,8 @@ class Button:
     def __init__(self, button_name, draw_pos=(0, 0)):
         self.button_name = button_name
         self.symbol = pygame.image.load("assets/img/buttons/{}.png".format(button_name)).convert_alpha()
+        self.unpressed_symbol = pygame.image.load("assets/img/buttons/{}.png".format(button_name)).convert_alpha()
+        self.pressed_symbol = pygame.image.load("assets/img/buttons/{}_pressed.png".format(button_name)).convert_alpha()
         self.size = self.symbol.get_size()
         self.draw_pos = draw_pos
 
@@ -39,3 +41,9 @@ class Button:
 
     def get_height(self):
         return self.size[1]
+
+    def button_down(self):
+        self.symbol = self.pressed_symbol
+
+    def button_up(self):
+        self.symbol = self.unpressed_symbol

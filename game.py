@@ -19,9 +19,19 @@ class Game:
         self.game_map = Map("01")
 
         self.building_mode = False
+        self.destroy_mode = True
+        self.building_laser = False
+        self.building_bomb = False
         self.active_building_area = None
         self.tower_to_build = None
         self.selected_tower = None
+        self.ingame_menu_button_pressed = False
+        self.unbuilt_tower = None       # wird am Cursor befestigt, wenn gebaut werden soll
+
+        self.left_menu_button_down = False
+        self.middle_menu_button_down = False
+        self.right_menu_button_down = False
+        self.pause_button_down = False
 
         self.impacted_projectiles = list()
 
@@ -37,9 +47,6 @@ class Game:
 
         # Ingame Menu positioning
         self.ingame_menu = IngameMenu()
-        menu_pos = self.win.get_width()/2 - self.ingame_menu.get_width()/2, \
-                   self.win.get_height() - self.ingame_menu.get_height()
-        self.ingame_menu.set_draw_pos(menu_pos)
 
         # Stats
         self.money = 20
@@ -94,12 +101,18 @@ class Game:
                     if event.type == QUIT:
                         self.keep_going = False
                         self.main_menu.end_game()
-                        exit(0)
-                    if event.type == MOUSEBUTTONDOWN:
+                    elif event.type == MOUSEBUTTONDOWN:
                         left, middle, right = pygame.mouse.get_pressed()
 
                         # DELETE TOWER
-                        if middle:
+                        '''if middle:
+                            for t in self.game_map.get_all_towers():
+                                if t.click_check(m_pos):
+                                    self.remove_tower(t)
+                                    if self.selected_tower == t:
+                                        self.selected_tower = None
+                                    break'''
+                        if left and self.destroy_mode:
                             for t in self.game_map.get_all_towers():
                                 if t.click_check(m_pos):
                                     self.remove_tower(t)
@@ -125,8 +138,18 @@ class Game:
 
                         # Click detection, if mouse-position is on tower
                         elif left and not self.building_mode:
-                            if self.ingame_menu.click_check(m_pos):
-                                self.pause = True
+                            if self.ingame_menu.left_btn_check(m_pos):
+                                self.left_menu_button_down = True
+                                self.ingame_menu.get_buttons()[0].button_down()
+                            elif self.ingame_menu.middle_btn_check(m_pos):
+                                self.middle_menu_button_down = True
+                                self.ingame_menu.get_buttons()[1].button_down()
+                            elif self.ingame_menu.right_btn_check(m_pos):
+                                self.right_menu_button_down = True
+                                self.ingame_menu.get_buttons()[2].button_down()
+                            elif self.ingame_menu.pause_check(m_pos):
+                                self.pause_button_down = True
+                                self.ingame_menu.get_buttons()[3].button_down()
                             else:
                                 for tower in self.game_map.get_all_towers():
                                     if tower.click_check(m_pos):
@@ -135,6 +158,41 @@ class Game:
                                 if self.selected_tower is not None:
                                     if not self.selected_tower.click_check(m_pos):
                                         self.selected_tower = None
+
+                    elif event.type == MOUSEBUTTONUP:
+                        for button in self.ingame_menu.get_buttons():
+                            button.button_up()
+                        if self.ingame_menu.pause_check(m_pos) and self.pause_button_down:
+                            self.pause = True
+                        elif self.ingame_menu.left_btn_check(m_pos) and self.left_menu_button_down:
+                            if self.ingame_menu.upgrade_mode:
+                                print('upgrade range')
+                            else:
+                                print('build laser')
+                                self.building_bomb = False
+                                self.destroy_mode = False
+                                self.building_laser = True
+                        elif self.ingame_menu.middle_btn_check(m_pos) and self.middle_menu_button_down:
+                            if self.ingame_menu.upgrade_mode:
+                                print('upgrade frequency')
+                            else:
+                                print('build bomb')
+                                self.building_laser = False
+                                self.destroy_mode = False
+                                self.building_bomb = True
+                        elif self.ingame_menu.right_btn_check(m_pos) and self.right_menu_button_down:
+                            if self.ingame_menu.upgrade_mode:
+                                print('upgrade power')
+                            else:
+                                print('destroy mode')
+                                self.building_laser = False
+                                self.building_bomb = False
+                                self.destroy_mode = True
+
+                        self.left_menu_button_down = False
+                        self.middle_menu_button_down = False
+                        self.right_menu_button_down = False
+                        self.pause_button_down = False
 
                 self.draw_ingame_menu()
                 self.show_selected_tower()
@@ -220,6 +278,8 @@ class Game:
 
     def draw_ingame_menu(self):
         self.win.blit(self.ingame_menu.get_symbol(), self.ingame_menu.get_draw_pos())
+        for button in self.ingame_menu.get_buttons():
+            self.win.blit(button.get_symbol(), button.get_draw_pos())
 
     def resume_game(self):
         self.pause = False

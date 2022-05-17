@@ -14,10 +14,9 @@ class MainMenu(Menu):
         pygame.display.set_caption("Tower Defense")
 
         self.win = pygame.display.set_mode((1024, 768))
-        background = pygame.image.load("assets/img/menu/menu.png").convert_alpha()
+        background = pygame.image.load("assets/img/menu/main_menu.png").convert_alpha()
 
-        draw_pos = (self.win.get_width()/2) - (background.get_width()/2), \
-                   (self.win.get_height()/2) - (background.get_height()/2)
+        draw_pos = (0, 0)
 
         super().__init__(draw_pos, background)
 
@@ -28,23 +27,30 @@ class MainMenu(Menu):
         self.save_menu = SaveMenu(self.win)
 
     def init_buttons(self):
-        new_game_button = Button("btn_bombbuild")
-        pos = self.calculate_vertical_btn_draw_pos(new_game_button, self.buttons.values())
-        new_game_button.set_draw_pos(pos)
+        new_game_button = Button("mbtn_new_game")
+        new_game_button.set_draw_pos((50, 220))
         new_game_button.click = lambda: self.new_game_button_clicked()
         self.add_button(new_game_button)
 
-        resume_game_button = Button("btn_bombbuild_pressed")
-        pos = self.calculate_vertical_btn_draw_pos(resume_game_button, self.buttons.values())
-        resume_game_button.set_draw_pos(pos)
+        resume_game_button = Button("mbtn_continue")
+        resume_game_button.set_draw_pos((537, 220))
         resume_game_button.click = lambda: self.resume_game_button_clicked()
         self.add_button(resume_game_button)
 
-        save_game = Button("btn_frequency")
-        pos = self.calculate_vertical_btn_draw_pos(save_game, self.buttons.values())
-        save_game.set_draw_pos(pos)
-        save_game.click = lambda: self.save_game_clicked()
-        self.add_button(save_game)
+        tutorial_button = Button("mbtn_tutorial")
+        tutorial_button.set_draw_pos((50, 390))
+        tutorial_button.click = lambda: self.tutorial_button_clicked()
+        self.add_button(tutorial_button)
+
+        scoreboard_button = Button("mbtn_ranking")
+        scoreboard_button.set_draw_pos((537, 390))
+        scoreboard_button.click = lambda: self.scoreboard_button_clicked()
+        self.add_button(scoreboard_button)
+
+        end_button = Button("mbtn_quit")
+        end_button.set_draw_pos((537, 560))
+        end_button.click = lambda: self.end_game()
+        self.add_button(end_button)
 
     def get_window(self):
         return self.win
@@ -52,7 +58,7 @@ class MainMenu(Menu):
     def show_menu(self):
         self.menu_shown = True
         while self.menu_shown:
-           # self.win.blit(self.background, self.draw_pos)
+            self.win.blit(self.background, self.draw_pos)
 
             m_pos = pygame.mouse.get_pos()
             for button in self.buttons.values():
@@ -88,6 +94,12 @@ class MainMenu(Menu):
             self.current_game.resume_game()
             self.menu_shown = False
 
+    def tutorial_button_clicked(self):
+        print('tutorial')
+
+    def scoreboard_button_clicked(self):
+        print('scoreboard')
+
     def save_game_clicked(self):
         if self.current_game is None:
             print("No game running")
@@ -97,3 +109,4 @@ class MainMenu(Menu):
 
     def end_game(self):
         self.menu_shown = False
+        exit(0)

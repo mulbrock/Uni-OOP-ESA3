@@ -1,22 +1,48 @@
+HAUPTMENÜ:
+
+Neues Spiel:
+x = 50  -> 487
+y = 220 -> 340
+
+Fortsetzen:
+x = 537 -> 974
+y = 220 -> 340
+
+Tutorial:
+x = 50  -> 487
+y = 390 -> 510
+
+Bestenliste:
+x = 537 -> 974
+y = 390 -> 510
+
+Beenden:
+x = 537 -> 974
+y = 560 -> 680
+
+-------------------------------
+
+IN-GAME:
+
 Menu
 x = 12
 y = 556
 
 Pause Button
-x = 917
-y = 576
+x = 917 -> 992
+y = 576 -> 736
 
 Upgrade Range / Laser Tower
-x = 32
-y = 576
+x = 32  -> 307
+y = 576 -> 696
 
 Upgrade Frequency / Bomb Tower
-x = 327
-y = 576
+x = 327 -> 602
+y = 576 -> 696
 
 Upgrade Power / Abreißen
-x = 622
-y = 576
+x = 622 -> 897
+y = 576 -> 696
 
 Building Area 1
 x = 12	-> 162
