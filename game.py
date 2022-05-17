@@ -27,7 +27,8 @@ class Game:
 
         self.timer = time.time()
         self.spawn_cool_down = 0.5
-        self.generate_enemies_cool_down = 2.0
+        self.generate_enemies_cool_down = 5.0
+        self.all_enemies_killed = True
 
         self.enemies_to_enter = list()
         self.wave = 1
@@ -75,7 +76,7 @@ class Game:
                 if time.time() - self.timer >= self.spawn_cool_down and len(self.enemies_to_enter) > 0:
                     self.spawn_enemies()
                     self.timer = time.time()
-                elif time.time() - self.timer >= self.generate_enemies_cool_down:
+                elif time.time() - self.timer >= self.generate_enemies_cool_down and self.all_enemies_killed:
                     self.timer = time.time()
                     self.generate_enemies()
                     self.enemies_to_enter.reverse()
@@ -141,6 +142,10 @@ class Game:
                 self.handle_bomb_impacts()
                 self.draw_entities(self.win)
 
+            if len(self.game_map.get_enemies()) == 0:
+                self.all_enemies_killed = True
+            else:
+                self.all_enemies_killed = False
             # Redisplay
             pygame.display.update()
 
