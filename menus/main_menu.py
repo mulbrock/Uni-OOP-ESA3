@@ -26,22 +26,20 @@ class MainMenu(Menu):
 
     def init_buttons(self):
         new_game_button = Button("btn_bombbuild")
-        pos = self.calculate_vertical_btn_draw_pos(new_game_button)
+        pos = self.calculate_vertical_btn_draw_pos(new_game_button, self.buttons.values())
         new_game_button.set_draw_pos(pos)
         new_game_button.click = lambda: self.new_game_button_clicked()
         self.add_button(new_game_button)
 
         resume_game_button = Button("btn_bombbuild_pressed")
-        pos = self.calculate_vertical_btn_draw_pos(resume_game_button)
-        newpos = pos[0], pos[1] + self.get_vertical_padding() + resume_game_button.get_height()
-        resume_game_button.set_draw_pos(newpos)
+        pos = self.calculate_vertical_btn_draw_pos(resume_game_button, self.buttons.values())
+        resume_game_button.set_draw_pos(pos)
         resume_game_button.click = lambda: self.resume_game_button_clicked()
         self.add_button(resume_game_button)
 
         save_game = Button("btn_frequency")
-        pos = self.calculate_vertical_btn_draw_pos(save_game)
-        newpos = pos[0], pos[1] + self.get_vertical_padding()*2 + save_game.get_height()*2
-        save_game.set_draw_pos(newpos)
+        pos = self.calculate_vertical_btn_draw_pos(save_game, self.buttons.values())
+        save_game.set_draw_pos(pos)
         save_game.click = lambda: self.save_game_clicked()
         self.add_button(save_game)
 
@@ -74,6 +72,7 @@ class MainMenu(Menu):
             pygame.display.update()
 
     def new_game_button_clicked(self):
+
         self.current_game = None
         self.current_game = Game(self.win, self)
         self.menu_shown = False

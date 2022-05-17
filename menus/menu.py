@@ -17,11 +17,12 @@ class Menu:
     def add_button(self, button):
         self.buttons.update({button.get_button_name(): button})
 
-    def calculate_vertical_btn_draw_pos(self, button):
+    def calculate_vertical_btn_draw_pos(self, button, button_list):
+        list_len = len(button_list)
         button_image = button.get_symbol()
         x = (self.background.get_width()/2) - button_image.get_width()/2
         y = (self.background.get_height()/2) - button_image.get_height()/2
-
+        y = y + (self.vertical_padding * list_len) + (button_image.get_height() * list_len)
         return x, y
 
     def get_vertical_padding(self):

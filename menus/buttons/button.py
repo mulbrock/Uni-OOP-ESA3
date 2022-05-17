@@ -18,6 +18,9 @@ class Button:
     def get_symbol(self):
         return self.symbol
 
+    def set_symbol(self, button_name):
+        self.symbol = pygame.image.load("assets/img/buttons/{}_pressed.png".format(button_name)).convert_alpha()
+
     def get_draw_pos(self):
         return self.draw_pos
 
