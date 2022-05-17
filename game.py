@@ -19,7 +19,7 @@ class Game:
         self.game_map = Map("01")
 
         self.building_mode = False
-        self.destroy_mode = True
+        self.destroy_mode = False
         self.building_laser = False
         self.building_bomb = False
         self.active_building_area = None
@@ -41,7 +41,6 @@ class Game:
         self.all_enemies_killed = True
 
         self.enemies_to_enter = list()
-        self.wave = 1
 
         self.main_menu = main_menu
 
@@ -51,6 +50,9 @@ class Game:
         # Stats
         self.money = 20
         self.lives = 20
+        self.wave = 1
+        self.kills = 0
+        self.enemies = 0
 
         self.keep_going = True
         self.pause = False
@@ -104,14 +106,7 @@ class Game:
                     elif event.type == MOUSEBUTTONDOWN:
                         left, middle, right = pygame.mouse.get_pressed()
 
-                        # DELETE TOWER
-                        '''if middle:
-                            for t in self.game_map.get_all_towers():
-                                if t.click_check(m_pos):
-                                    self.remove_tower(t)
-                                    if self.selected_tower == t:
-                                        self.selected_tower = None
-                                    break'''
+                        # Destroy Tower
                         if left and self.destroy_mode:
                             for t in self.game_map.get_all_towers():
                                 if t.click_check(m_pos):
@@ -188,6 +183,8 @@ class Game:
                                 self.building_laser = False
                                 self.building_bomb = False
                                 self.destroy_mode = True
+                        else:
+                            self.destroy_mode = False
 
                         self.left_menu_button_down = False
                         self.middle_menu_button_down = False
@@ -199,6 +196,8 @@ class Game:
                 self.handle_tower_attack()
                 self.handle_bomb_impacts()
                 self.draw_entities(self.win)
+                self.print_stats()
+                self.update_stats()
 
             if len(self.game_map.get_enemies()) == 0:
                 self.all_enemies_killed = True
@@ -211,6 +210,30 @@ class Game:
         self.draw_enemies(win)
         self.draw_towers(win)
         self.draw_tower_to_build(win)
+
+    def update_stats(self):
+        self.enemies = len(self.game_map.get_enemies())
+
+    def print_stats(self):
+        lives_font = pygame.font.Font("freesansbold.ttf", 24)
+        lives_font = lives_font.render(str(self.lives), True, (255, 255, 255))
+        self.win.blit(lives_font, (75, 726))
+
+        coin_font = pygame.font.Font("freesansbold.ttf", 24)
+        coin_font = coin_font.render(str(self.money), True, (255, 255, 255))
+        self.win.blit(coin_font, (250, 726))
+
+        kill_font = pygame.font.Font("freesansbold.ttf", 24)
+        kill_font = kill_font.render(str(self.kills), True, (255, 255, 255))
+        self.win.blit(kill_font, (425, 726))
+
+        enemy_font = pygame.font.Font("freesansbold.ttf", 24)
+        enemy_font = enemy_font.render(str(self.enemies), True, (255, 255, 255))
+        self.win.blit(enemy_font, (600, 726))
+
+        wave_font = pygame.font.Font("freesansbold.ttf", 24)
+        wave_font = wave_font.render(str(self.wave), True, (255, 255, 255))
+        self.win.blit(wave_font, (775, 726))
 
     def handle_tower_attack(self):
         for tower in self.game_map.get_all_towers():
