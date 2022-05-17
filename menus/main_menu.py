@@ -86,7 +86,11 @@ class MainMenu(Menu):
             self.menu_shown = False
 
     def save_game_clicked(self):
-        print("save")
+        if self.current_game is None:
+            print("No game running")
+        else:
+
+            print("save")
 
     def end_game(self):
         self.menu_shown = False
