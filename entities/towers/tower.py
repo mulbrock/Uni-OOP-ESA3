@@ -12,15 +12,15 @@ class Tower(Entity):
         self.build_cost = _cost
 
         self.range = _range
-        self.range_upgrade_level = 0
+        self.range_level = 1
         self.range_upgrade_cost = 1
 
         self.cool_down_time = _cool_down
-        self.speed_upgrade_level = 0
+        self.speed_level = 1
         self.speed_upgrade_cost = 1
 
         self.attack_power = _attack_power
-        self.attack_power_upgrade_level = 0
+        self.attack_power_level = 1
         self.attack_power_upgrade_cost = 1
 
         self.timer = time.time()
@@ -59,7 +59,7 @@ class Tower(Entity):
 
     def upgrade_range(self):
         self.range += 5
-        self.range_upgrade_level += 1
+        self.range_level += 1
         self.range_upgrade_cost += 2
 
     def get_upgrade_range_cost(self):
@@ -67,7 +67,7 @@ class Tower(Entity):
 
     def upgrade_power(self):
         self.attack_power += 1
-        self.attack_power_upgrade_level += 1
+        self.attack_power_level += 1
         self.attack_power_upgrade_cost += 2
 
     def get_upgrade_power_cost(self):
@@ -75,7 +75,7 @@ class Tower(Entity):
 
     def upgrade_speed(self):
         self.cool_down_time -= 0.01
-        self.speed_upgrade_level += 1
+        self.speed_level += 1
         self.speed_upgrade_cost += 2
 
     def get_upgrade_cost(self):

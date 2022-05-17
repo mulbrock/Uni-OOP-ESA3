@@ -6,7 +6,7 @@ from entities.entity import Entity
 class Projectile(Entity):
 
     def __init__(self, starting_pos, dest_pos, attack_power):
-        _symbol = pygame.image.load("assets/img/projectiles/projectile_1.png")
+        _symbol = pygame.image.load("assets/img/projectiles/projectile_9.png")
         super().__init__(starting_pos, _symbol)
         self.destination_pos = dest_pos
         self.impact_range = 60

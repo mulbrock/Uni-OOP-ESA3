@@ -3,6 +3,7 @@ from pygame.locals import *
 
 from game import Game
 from menus.menu import Menu
+from menus.save_menu import SaveMenu
 from menus.buttons.button import Button
 
 
@@ -23,6 +24,8 @@ class MainMenu(Menu):
         self.current_game = None
         self.init_buttons()
         self.menu_shown = True
+
+        self.save_menu = SaveMenu(self.win)
 
     def init_buttons(self):
         new_game_button = Button("btn_bombbuild")
@@ -89,7 +92,7 @@ class MainMenu(Menu):
         if self.current_game is None:
             print("No game running")
         else:
-
+            self.save_menu.draw()
             print("save")
 
     def end_game(self):
