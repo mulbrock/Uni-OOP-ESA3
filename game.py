@@ -135,6 +135,7 @@ class Game:
                                 self.tower_to_build.set_center(m_pos)
                                 if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
                                     if self.active_building_area.is_building_space_empty(self.tower_to_build):
+                                        self.money -= self.tower_to_build.COST
                                         self.active_building_area.add_building(self.tower_to_build, m_pos)
                                         self.building_bomb = False
                                         self.building_laser = False
@@ -177,20 +178,20 @@ class Game:
                             if self.ingame_menu.upgrade_mode:
                                 print('upgrade range')
                             else:
-                                print('build laser')
-                                self.building_bomb = False
-                                self.destroy_mode = False
-                                self.building_laser = True
-                                self.tower_to_build = LaserTower(m_pos)
+                                if self.money >= LaserTower.COST:
+                                    self.building_bomb = False
+                                    self.destroy_mode = False
+                                    self.building_laser = True
+                                    self.tower_to_build = LaserTower(m_pos)
                         elif self.ingame_menu.middle_btn_check(m_pos) and self.middle_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
                                 print('upgrade frequency')
                             else:
-                                print('build bomb')
-                                self.building_laser = False
-                                self.destroy_mode = False
-                                self.building_bomb = True
-                                self.tower_to_build = BombTower(m_pos)
+                                if self.money >= BombTower.COST:
+                                    self.building_laser = False
+                                    self.destroy_mode = False
+                                    self.building_bomb = True
+                                    self.tower_to_build = BombTower(m_pos)
                         elif self.ingame_menu.right_btn_check(m_pos) and self.right_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
                                 print('upgrade power')
@@ -299,7 +300,7 @@ class Game:
             bomb_print_color = (255, 255, 255)
         elif self.money >= LaserTower.COST:
             laser_print_color = (255, 255, 255)
-            bomb_print_color = (0, 0, 0)
+            bomb_print_color = (255, 0, 0)
         else:
             laser_print_color = (255, 0, 0)
             bomb_print_color = (255, 0, 0)
