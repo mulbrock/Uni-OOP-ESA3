@@ -33,6 +33,7 @@ class Entity(ABC):
     def set_center(self, center_pos):
         self.center = center_pos
         self.draw_pos = self.center[0] - self.size[0] / 2, self.center[1] - self.size[1] / 2
+        self.set_area()
 
     def is_pos_in_area(self, pos):
         x, y = pos
