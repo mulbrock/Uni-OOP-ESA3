@@ -8,12 +8,12 @@ from entities.towers.projectile import Projectile
 class BombTower(Tower):
 
     def __init__(self, _pos: tuple):
-        _symbol = pygame.image.load("assets/img/towers/bomb_1.png")
+        _symbol_path = "assets/img/towers/bomb_1.png"
         _range = 150
         _cool_down = 3.0
         _attack_power = 1
         _cost = 10
-        super().__init__(_pos, _symbol, _range, _cool_down, _attack_power, _cost)
+        super().__init__(_pos, _symbol_path, _range, _cool_down, _attack_power, _cost)
 
         self.projectiles = list()
         self.position_to_attack = (0, 0)

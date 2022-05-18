@@ -4,19 +4,24 @@ import pygame
 
 class Entity(ABC):
 
-    def __init__(self, _pos: tuple, _symbol: pygame.image):
-        self.size = _symbol.get_size()
-        self.symbol = _symbol
+    def __init__(self, _pos: tuple, _symbol_path):
+        self.symbol_path = _symbol_path
+        self.symbol = pygame.image.load(_symbol_path).convert_alpha()
+        self.size = self.symbol.get_size()
         self.center = _pos
         self.draw_pos = self.center[0] - self.size[0] / 2, self.center[1] - self.size[1] / 2
 
         self.area = {}
         self.set_area()
 
-    def set_symbol(self, path):
+    def set_symbol_path(self, path):
+        self.symbol_path = path
         self.symbol = pygame.image.load(path).convert_alpha()
         self.size = self.symbol.get_size()
         self.set_area()
+
+    def get_symbol_path(self):
+        return self.symbol_path
 
     def get_symbol(self):
         return self.symbol

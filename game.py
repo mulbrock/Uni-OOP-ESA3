@@ -173,7 +173,12 @@ class Game:
                             self.pause = True
                         elif self.ingame_menu.left_btn_check(m_pos) and self.left_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
-                                print('upgrade range')
+                                if self.selected_tower is not None:
+                                    update_cost = self.selected_tower.get_upgrade_range_cost()
+                                    if self.money >= update_cost:
+                                        if self.selected_tower.upgrade_range():
+                                            print('upgrade range')
+                                            self.money -= update_cost
                             else:
                                 print('build laser')
                                 self.building_bomb = False
@@ -182,7 +187,12 @@ class Game:
                                 self.tower_to_build = LaserTower(m_pos)
                         elif self.ingame_menu.middle_btn_check(m_pos) and self.middle_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
-                                print('upgrade frequency')
+                                if self.selected_tower is not None:
+                                    update_cost = self.selected_tower.get_upgrade_speed_cost()
+                                    if self.money >= update_cost:
+                                        if self.selected_tower.upgrade_speed():
+                                            print('upgrade speed')
+                                            self.money -= update_cost
                             else:
                                 print('build bomb')
                                 self.building_laser = False
@@ -191,7 +201,12 @@ class Game:
                                 self.tower_to_build = BombTower(m_pos)
                         elif self.ingame_menu.right_btn_check(m_pos) and self.right_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
-                                print('upgrade power')
+                                if self.selected_tower is not None:
+                                    update_cost = self.selected_tower.get_upgrade_power_cost()
+                                    if self.money >= update_cost:
+                                        if self.selected_tower.upgrade_power():
+                                            print('upgrade power')
+                                            self.money -= update_cost
                             else:
                                 print('destroy mode')
                                 self.building_laser = False

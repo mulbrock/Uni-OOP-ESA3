@@ -1,13 +1,14 @@
 import pygame
 import time
 import math
+import re
 from entities.entity import Entity
 
 
 class Tower(Entity):
 
-    def __init__(self, _pos: tuple, _symbol: pygame.image, _range, _cool_down, _attack_power, _cost):
-        super().__init__(_pos, _symbol)
+    def __init__(self, _pos: tuple, _symbol_path, _range, _cool_down, _attack_power, _cost):
+        super().__init__(_pos, _symbol_path)
 
         self.build_cost = _cost
 
@@ -58,27 +59,40 @@ class Tower(Entity):
         raise NotImplementedError
 
     def upgrade_range(self):
-        self.range += 5
-        self.range_level += 1
-        self.range_upgrade_cost += 2
+        if self.range_level < 10:
+            self.range += 5
+            self.range_level += 1
+            self.range_upgrade_cost += 2
+            path = self.get_symbol_path()
+
+            new_symbol_path = re.sub("\d", str(self.range_level), path)
+            self.set_symbol_path(new_symbol_path)
+            return True
+        return False
 
     def get_upgrade_range_cost(self):
         return self.range_upgrade_cost
 
     def upgrade_power(self):
-        self.attack_power += 1
-        self.attack_power_level += 1
-        self.attack_power_upgrade_cost += 2
+        if self.attack_power_level < 10:
+            self.attack_power += 1
+            self.attack_power_level += 1
+            self.attack_power_upgrade_cost += 2
+            return True
+        return False
 
     def get_upgrade_power_cost(self):
         return self.attack_power_upgrade_cost
 
     def upgrade_speed(self):
-        self.cool_down_time -= 0.01
-        self.speed_level += 1
-        self.speed_upgrade_cost += 2
+        if self.speed_level < 10:
+            self.cool_down_time -= 0.01
+            self.speed_level += 1
+            self.speed_upgrade_cost += 2
+            return True
+        return False
 
-    def get_upgrade_cost(self):
+    def get_upgrade_speed_cost(self):
         return self.speed_upgrade_cost
 
     def draw_range(self, win):
