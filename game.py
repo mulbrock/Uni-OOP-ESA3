@@ -294,25 +294,50 @@ class Game:
         self.win.blit(wave_font, (775, 726))
 
     def print_building_cost(self):
+        if self.money >= BombTower.COST:
+            laser_print_color = (255, 255, 255)
+            bomb_print_color = (255, 255, 255)
+        elif self.money >= LaserTower.COST:
+            laser_print_color = (255, 255, 255)
+            bomb_print_color = (0, 0, 0)
+        else:
+            laser_print_color = (255, 0, 0)
+            bomb_print_color = (255, 0, 0)
+
         laser_cost_font = pygame.font.Font("freesansbold.ttf", 24)
-        laser_cost_font = laser_cost_font.render(str(LaserTower.COST), True, (255, 255, 255))
+        laser_cost_font = laser_cost_font.render(str(LaserTower.COST), True, laser_print_color)
         self.win.blit(laser_cost_font, (277, 668))
 
         bomb_cost_font = pygame.font.Font("freesansbold.ttf", 24)
-        bomb_cost_font = bomb_cost_font.render(str(BombTower.COST), True, (255, 255, 255))
+        bomb_cost_font = bomb_cost_font.render(str(BombTower.COST), True, bomb_print_color)
         self.win.blit(bomb_cost_font, (566, 668))
 
     def print_upgrade_cost(self):
+        if self.money >= self.selected_tower.get_upgrade_range_cost():
+            range_print_color = (255, 255, 255)
+        else:
+            range_print_color = (255, 0, 0)
+
+        if self.money >= self.selected_tower.get_upgrade_speed_cost():
+            speed_print_color = (255, 255, 255)
+        else:
+            speed_print_color = (255, 0, 0)
+
+        if self.money >= self.selected_tower.get_upgrade_power_cost():
+            power_print_color = (255, 255, 255)
+        else:
+            power_print_color = (255, 0, 0)
+
         range_cost_font = pygame.font.Font("freesansbold.ttf", 24)
-        range_cost_font = range_cost_font.render(str(self.selected_tower.get_upgrade_range_cost()), True, (255, 255, 255))
+        range_cost_font = range_cost_font.render(str(self.selected_tower.get_upgrade_range_cost()), True, range_print_color)
         self.win.blit(range_cost_font, (270, 668))
 
         speed_cost_font = pygame.font.Font("freesansbold.ttf", 24)
-        speed_cost_font = speed_cost_font.render(str(self.selected_tower.get_upgrade_speed_cost()), True, (255, 255, 255))
+        speed_cost_font = speed_cost_font.render(str(self.selected_tower.get_upgrade_speed_cost()), True, speed_print_color)
         self.win.blit(speed_cost_font, (566, 668))
 
         power_cost_font = pygame.font.Font("freesansbold.ttf", 24)
-        power_cost_font = power_cost_font.render(str(self.selected_tower.get_upgrade_power_cost()), True, (255, 255, 255))
+        power_cost_font = power_cost_font.render(str(self.selected_tower.get_upgrade_power_cost()), True, power_print_color)
         self.win.blit(power_cost_font, (861, 668))
 
     def print_tower_levels(self):
