@@ -28,16 +28,25 @@ class LaserTower(Tower):
         if self.aimed_enemy is not None:
             enemy_pos = self.aimed_enemy.get_center()
             beam_origin_pos = self.get_center()
+            # pygame.draw.line(win, (0, 255, 255), beam_origin_pos, enemy_pos, (2))
 
-            beam_num = int(self.attack_power_level / 3) + 1
-
-            for beam in range(1, beam_num + 1):
-                print(beam)
-                if beam == 1:
-
-                    pygame.draw.line(win, (0, 255, 255), beam_origin_pos, enemy_pos, (2))
-                if beam == 2:
-
-                    enemy_pos = enemy_pos[0] - 10, enemy_pos[1] - 10
-                    pygame.draw.line(win, (0, 0, 255), beam_origin_pos, enemy_pos, (2))
-
+            if self.attack_power_level == 1:
+                pygame.draw.line(win, (0, 255, 0), beam_origin_pos, enemy_pos, 1)
+            elif self.attack_power_level == 2:
+                pygame.draw.line(win, (0, 255, 0), beam_origin_pos, enemy_pos, 3)
+            elif self.attack_power_level == 3:
+                pygame.draw.line(win, (0, 255, 0), beam_origin_pos, enemy_pos, 6)
+            elif self.attack_power_level == 4:
+                pygame.draw.line(win, (0, 0, 255), beam_origin_pos, enemy_pos, 2)
+            elif self.attack_power_level == 5:
+                pygame.draw.line(win, (0, 0, 255), beam_origin_pos, enemy_pos, 5)
+            elif self.attack_power_level == 6:
+                pygame.draw.line(win, (0, 0, 255), beam_origin_pos, enemy_pos, 8)
+            elif self.attack_power_level == 7:
+                pygame.draw.line(win, (255, 0, 0), beam_origin_pos, enemy_pos, 4)
+            elif self.attack_power_level == 8:
+                pygame.draw.line(win, (255, 0, 0), beam_origin_pos, enemy_pos, 7)
+            elif self.attack_power_level == 9:
+                pygame.draw.line(win, (255, 0, 0), beam_origin_pos, enemy_pos, 10)
+            else:
+                pygame.draw.line(win, (255, 0, 0), beam_origin_pos, enemy_pos, 13)
