@@ -35,6 +35,7 @@ class Game:
         self.middle_menu_button_down = False
         self.right_menu_button_down = False
         self.pause_button_down = False
+        self.button_up_after_build = False
 
         # Projectiles
         self.impacted_projectiles = list()
@@ -105,12 +106,14 @@ class Game:
                         self.active_building_area = area
 
                 # Mouse clicks
+                self.button_up_after_build = False
+
                 for event in pygame.event.get():
                     if event.type == QUIT:
                         self.keep_going = False
                         self.main_menu.end_game()
 
-                    elif event.type == MOUSEBUTTONDOWN:
+                    if event.type == MOUSEBUTTONDOWN:
                         left, middle, right = pygame.mouse.get_pressed()
 
                         # Game Over
@@ -129,14 +132,16 @@ class Game:
                         # Build Tower
                         if left and (self.building_bomb or self.building_laser):
                             if self.active_building_area is not None:
-                                if not self.active_building_area.is_tower_in_building_area(self.tower_to_build):
+                                self.tower_to_build.set_center(m_pos)
+                                if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
                                     if self.active_building_area.is_building_space_empty(self.tower_to_build):
                                         self.active_building_area.add_building(self.tower_to_build, m_pos)
                                         self.building_bomb = False
                                         self.building_laser = False
+                                        self.button_up_after_build = True
 
                         # Click detection, if mouse-position is on tower
-                        elif left:
+                        if left:
                             if self.ingame_menu.left_btn_check(m_pos):
                                 self.left_menu_button_down = True
                                 self.ingame_menu.get_buttons()[0].button_down()
@@ -149,7 +154,7 @@ class Game:
                             elif self.ingame_menu.pause_check(m_pos):
                                 self.pause_button_down = True
                                 self.ingame_menu.get_buttons()[3].button_down()
-                            else:
+                            elif not (self.building_bomb or self.building_laser) and not self.button_up_after_build:
                                 for tower in self.game_map.get_all_towers():
                                     if tower.click_check(m_pos):
                                         self.selected_tower = tower
