@@ -66,7 +66,9 @@ class BuildingArea:
 
         return True
 
-    def add_building(self, tower: Tower):
+    def add_building(self, tower: Tower, m_pos: tuple):
+        # x, y = m_pos
+        tower.set_center(m_pos)
         self.buildings.append(tower)
 
     def get_image(self):

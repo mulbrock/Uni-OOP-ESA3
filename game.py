@@ -18,33 +18,38 @@ class Game:
         self.win = win
         self.game_map = Map("01")
 
-        self.building_mode = False
+        # Modes
+        self.menu_in_building_mode = True
         self.destroy_mode = False
         self.building_laser = False
         self.building_bomb = False
+
+        # Active Entities / Areas
         self.active_building_area = None
         self.tower_to_build = None
         self.selected_tower = None
-        self.ingame_menu_button_pressed = False
-        self.unbuilt_tower = None       # wird am Cursor befestigt, wenn gebaut werden soll
 
+        # Ingame Menu Buttons
+        self.ingame_menu_button_pressed = False
         self.left_menu_button_down = False
         self.middle_menu_button_down = False
         self.right_menu_button_down = False
         self.pause_button_down = False
 
+        # Projectiles
         self.impacted_projectiles = list()
 
+        # Enemies
         self.timer = time.time()
         self.spawn_cool_down = 0.5
         self.generate_enemies_cool_down = 5.0
         self.all_enemies_killed = True
-
         self.enemies_to_enter = list()
 
+        # Main Menu
         self.main_menu = main_menu
 
-        # Ingame Menu positioning
+        # Ingame Menu
         self.ingame_menu = IngameMenu()
 
         # Stats
@@ -54,6 +59,7 @@ class Game:
         self.kills = 0
         self.enemies = 0
 
+        # Run Game
         self.keep_going = True
         self.pause = False
 
@@ -103,8 +109,13 @@ class Game:
                     if event.type == QUIT:
                         self.keep_going = False
                         self.main_menu.end_game()
+
                     elif event.type == MOUSEBUTTONDOWN:
                         left, middle, right = pygame.mouse.get_pressed()
+
+                        # Game Over
+                        if self.lives == 0:
+                            pass
 
                         # Destroy Tower
                         if left and self.destroy_mode:
@@ -115,24 +126,17 @@ class Game:
                                         self.selected_tower = None
                                     break
 
-                        # Building Mode stuff
-                        if right and self.building_mode:
-                            self.tower_to_build = BombTower(m_pos)
-
-                        elif right and not self.building_mode:
-                            self.building_mode = True
-                            self.tower_to_build = LaserTower(m_pos)
-
-                        elif left and self.building_mode:
+                        # Build Tower
+                        if left and (self.building_bomb or self.building_laser):
                             if self.active_building_area is not None:
-
-                                if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
+                                if not self.active_building_area.is_tower_in_building_area(self.tower_to_build):
                                     if self.active_building_area.is_building_space_empty(self.tower_to_build):
-                                        self.active_building_area.add_building(self.tower_to_build)
-                                        self.building_mode = False
+                                        self.active_building_area.add_building(self.tower_to_build, m_pos)
+                                        self.building_bomb = False
+                                        self.building_laser = False
 
                         # Click detection, if mouse-position is on tower
-                        elif left and not self.building_mode:
+                        elif left:
                             if self.ingame_menu.left_btn_check(m_pos):
                                 self.left_menu_button_down = True
                                 self.ingame_menu.get_buttons()[0].button_down()
@@ -149,10 +153,13 @@ class Game:
                                 for tower in self.game_map.get_all_towers():
                                     if tower.click_check(m_pos):
                                         self.selected_tower = tower
+                                        self.menu_in_building_mode = False
+                                        self.ingame_menu.switch_to_upgrade_view()
                                         break
                                 if self.selected_tower is not None:
                                     if not self.selected_tower.click_check(m_pos):
                                         self.selected_tower = None
+                                        self.ingame_menu.switch_to_build_view()
 
                     elif event.type == MOUSEBUTTONUP:
                         for button in self.ingame_menu.get_buttons():
@@ -167,6 +174,7 @@ class Game:
                                 self.building_bomb = False
                                 self.destroy_mode = False
                                 self.building_laser = True
+                                self.tower_to_build = LaserTower(m_pos)
                         elif self.ingame_menu.middle_btn_check(m_pos) and self.middle_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
                                 print('upgrade frequency')
@@ -175,6 +183,7 @@ class Game:
                                 self.building_laser = False
                                 self.destroy_mode = False
                                 self.building_bomb = True
+                                self.tower_to_build = BombTower(m_pos)
                         elif self.ingame_menu.right_btn_check(m_pos) and self.right_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
                                 print('upgrade power')
@@ -199,17 +208,20 @@ class Game:
                 self.print_stats()
                 self.update_stats()
 
+                if self.building_laser or self.building_bomb:
+                    self.draw_tower_to_build(self.win, m_pos)
+
             if len(self.game_map.get_enemies()) == 0:
                 self.all_enemies_killed = True
             else:
                 self.all_enemies_killed = False
+
             # Redisplay
             pygame.display.update()
 
     def draw_entities(self, win):
         self.draw_enemies(win)
         self.draw_towers(win)
-        self.draw_tower_to_build(win)
 
     def update_stats(self):
         self.enemies = len(self.game_map.get_enemies())
@@ -265,9 +277,15 @@ class Game:
         for tower in self.game_map.get_all_towers():
             win.blit(tower.get_symbol(), tower.get_draw_pos())
 
-    def draw_tower_to_build(self, win):
-        if self.tower_to_build is not None and self.building_mode:
-            win.blit(self.tower_to_build.get_symbol(), self.tower_to_build.get_draw_pos())
+    def draw_tower_to_build(self, win, m_pos):
+        x, y = m_pos
+        if type(self.tower_to_build) == LaserTower:
+            x -= 10
+            y -= 10
+        else:
+            x -= 22
+            y -= 22
+        win.blit(self.tower_to_build.get_symbol(), (x, y))
 
     def spawn_enemies(self):
         if len(self.enemies_to_enter) > 0:

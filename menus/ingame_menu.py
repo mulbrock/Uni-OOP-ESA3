@@ -87,17 +87,18 @@ class IngameMenu(Menu):
     def get_buttons(self):
         return self.buttons
 
-    def switch_view(self):
-        if self.upgrade_mode:
-            self.upgrade_mode = True
-            self.buttons.clear()
-            self.buttons = [Button('btn_range', draw_pos=(32, 576)),
-                            Button('btn_frequency', draw_pos=(327, 576)),
-                            Button('btn_power', draw_pos=(622, 576))]
-        else:
-            self.upgrade_mode = False
-            self.buttons.clear()
-            self.buttons = [Button('btn_laserbuild', draw_pos=(32, 576)),
-                            Button('btn_bombbuild', draw_pos=(327, 576)),
-                            Button('btn_destroy', draw_pos=(622, 576)),
-                            Button('btn_pause', draw_pos=(917, 576))]
+    def switch_to_upgrade_view(self):
+        self.upgrade_mode = True
+        self.buttons.clear()
+        self.buttons = [Button('btn_range', draw_pos=(32, 576)),
+                        Button('btn_frequency', draw_pos=(327, 576)),
+                        Button('btn_power', draw_pos=(622, 576)),
+                        Button('btn_pause', draw_pos=(917, 576))]
+
+    def switch_to_build_view(self):
+        self.upgrade_mode = False
+        self.buttons.clear()
+        self.buttons = [Button('btn_laserbuild', draw_pos=(32, 576)),
+                        Button('btn_bombbuild', draw_pos=(327, 576)),
+                        Button('btn_destroy', draw_pos=(622, 576)),
+                        Button('btn_pause', draw_pos=(917, 576))]
