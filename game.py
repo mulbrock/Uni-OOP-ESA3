@@ -129,7 +129,8 @@ class Game:
                         # Build Tower
                         if left and (self.building_bomb or self.building_laser):
                             if self.active_building_area is not None:
-                                if not self.active_building_area.is_tower_in_building_area(self.tower_to_build):
+                                self.tower_to_build.set_center(m_pos)
+                                if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
                                     if self.active_building_area.is_building_space_empty(self.tower_to_build):
                                         self.active_building_area.add_building(self.tower_to_build, m_pos)
                                         self.building_bomb = False
