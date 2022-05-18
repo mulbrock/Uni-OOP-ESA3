@@ -17,6 +17,7 @@ class Game:
     def __init__(self, win, main_menu):
         self.win = win
         self.game_map = Map("01")
+        self.destroy_symbol = pygame.image.load("assets/img/projectiles/projectile_10.png").convert_alpha()
 
         # Modes
         self.menu_in_building_mode = True
@@ -231,6 +232,9 @@ class Game:
                 self.print_stats()
                 self.update_stats()
 
+                if self.destroy_mode:
+                    self.draw_destroy_symbol(self.win, m_pos)
+
                 if self.building_laser or self.building_bomb:
                     self.draw_tower_to_build(self.win, m_pos)
 
@@ -274,6 +278,12 @@ class Game:
             x -= 22
             y -= 22
         win.blit(self.tower_to_build.get_symbol(), (x, y))
+
+    def draw_destroy_symbol(self, win, m_pos):
+        x, y = m_pos
+        x -= 10
+        y -= 10
+        win.blit(self.destroy_symbol, (x, y))
 
     def draw_towers(self, win):
         for tower in self.game_map.get_all_towers():
