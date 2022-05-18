@@ -97,3 +97,12 @@ class Tower(Entity):
 
     def draw_range(self, win):
         pygame.draw.circle(win, [0, 200, 200, 50], self.get_center(), self.range, 2)
+
+    def get_range_level(self):
+        return self.range_level
+
+    def get_speed_level(self):
+        return self.speed_level
+
+    def get_power_level(self):
+        return self.attack_power_level

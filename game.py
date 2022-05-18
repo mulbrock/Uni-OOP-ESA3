@@ -135,6 +135,7 @@ class Game:
                                 self.tower_to_build.set_center(m_pos)
                                 if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
                                     if self.active_building_area.is_building_space_empty(self.tower_to_build):
+                                        self.money -= self.tower_to_build.COST
                                         self.active_building_area.add_building(self.tower_to_build, m_pos)
                                         self.building_bomb = False
                                         self.building_laser = False
@@ -165,7 +166,9 @@ class Game:
                                     if not self.selected_tower.click_check(m_pos):
                                         self.selected_tower = None
                                         self.ingame_menu.switch_to_build_view()
+                                        self.menu_in_building_mode = True
 
+                    # Upgrading / Activating Build
                     elif event.type == MOUSEBUTTONUP:
                         for button in self.ingame_menu.get_buttons():
                             button.button_up()
@@ -180,11 +183,11 @@ class Game:
                                             print('upgrade range')
                                             self.money -= update_cost
                             else:
-                                print('build laser')
-                                self.building_bomb = False
-                                self.destroy_mode = False
-                                self.building_laser = True
-                                self.tower_to_build = LaserTower(m_pos)
+                                if self.money >= LaserTower.COST:
+                                    self.building_bomb = False
+                                    self.destroy_mode = False
+                                    self.building_laser = True
+                                    self.tower_to_build = LaserTower(m_pos)
                         elif self.ingame_menu.middle_btn_check(m_pos) and self.middle_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
                                 if self.selected_tower is not None:
@@ -194,11 +197,11 @@ class Game:
                                             print('upgrade speed')
                                             self.money -= update_cost
                             else:
-                                print('build bomb')
-                                self.building_laser = False
-                                self.destroy_mode = False
-                                self.building_bomb = True
-                                self.tower_to_build = BombTower(m_pos)
+                                if self.money >= BombTower.COST:
+                                    self.building_laser = False
+                                    self.destroy_mode = False
+                                    self.building_bomb = True
+                                    self.tower_to_build = BombTower(m_pos)
                         elif self.ingame_menu.right_btn_check(m_pos) and self.right_menu_button_down:
                             if self.ingame_menu.upgrade_mode:
                                 if self.selected_tower is not None:
@@ -231,6 +234,12 @@ class Game:
                 if self.building_laser or self.building_bomb:
                     self.draw_tower_to_build(self.win, m_pos)
 
+                if self.menu_in_building_mode:
+                    self.print_building_cost()
+                else:
+                    self.print_tower_levels()
+                    self.print_upgrade_cost()
+
             if len(self.game_map.get_enemies()) == 0:
                 self.all_enemies_killed = True
             else:
@@ -239,13 +248,47 @@ class Game:
             # Redisplay
             pygame.display.update()
 
+    # Drawing
     def draw_entities(self, win):
         self.draw_enemies(win)
         self.draw_towers(win)
 
-    def update_stats(self):
-        self.enemies = len(self.game_map.get_enemies())
+    def draw_enemies(self, win):
+        for enemy in self.game_map.get_enemies():
+            if enemy.get_life() <= 0:
+                self.game_map.remove_enemy(enemy)
+                self.money += enemy.kill_reward
+                self.kills += 1
+            win.blit(enemy.get_symbol(), enemy.get_draw_pos())
+            enemy.draw_life(win)
+            if not enemy.move_forward():
+                self.game_map.remove_enemy(enemy)
+                self.lives -= 1
 
+    def draw_tower_to_build(self, win, m_pos):
+        x, y = m_pos
+        if type(self.tower_to_build) == LaserTower:
+            x -= 10
+            y -= 10
+        else:
+            x -= 22
+            y -= 22
+        win.blit(self.tower_to_build.get_symbol(), (x, y))
+
+    def draw_towers(self, win):
+        for tower in self.game_map.get_all_towers():
+            win.blit(tower.get_symbol(), tower.get_draw_pos())
+
+    def show_selected_tower(self):
+        if self.selected_tower is not None:
+            self.selected_tower.draw_range(self.win)
+
+    def draw_ingame_menu(self):
+        self.win.blit(self.ingame_menu.get_symbol(), self.ingame_menu.get_draw_pos())
+        for button in self.ingame_menu.get_buttons():
+            self.win.blit(button.get_symbol(), button.get_draw_pos())
+
+    # Printing Stats and Costs
     def print_stats(self):
         lives_font = pygame.font.Font("freesansbold.ttf", 24)
         lives_font = lives_font.render(str(self.lives), True, (255, 255, 255))
@@ -267,6 +310,71 @@ class Game:
         wave_font = wave_font.render(str(self.wave), True, (255, 255, 255))
         self.win.blit(wave_font, (775, 726))
 
+    def print_building_cost(self):
+        if self.money >= BombTower.COST:
+            laser_print_color = (255, 255, 255)
+            bomb_print_color = (255, 255, 255)
+        elif self.money >= LaserTower.COST:
+            laser_print_color = (255, 255, 255)
+            bomb_print_color = (255, 0, 0)
+        else:
+            laser_print_color = (255, 0, 0)
+            bomb_print_color = (255, 0, 0)
+
+        laser_cost_font = pygame.font.Font("freesansbold.ttf", 24)
+        laser_cost_font = laser_cost_font.render(str(LaserTower.COST), True, laser_print_color)
+        self.win.blit(laser_cost_font, (277, 668))
+
+        bomb_cost_font = pygame.font.Font("freesansbold.ttf", 24)
+        bomb_cost_font = bomb_cost_font.render(str(BombTower.COST), True, bomb_print_color)
+        self.win.blit(bomb_cost_font, (566, 668))
+
+    def print_upgrade_cost(self):
+        if self.money >= self.selected_tower.get_upgrade_range_cost():
+            range_print_color = (255, 255, 255)
+        else:
+            range_print_color = (255, 0, 0)
+
+        if self.money >= self.selected_tower.get_upgrade_speed_cost():
+            speed_print_color = (255, 255, 255)
+        else:
+            speed_print_color = (255, 0, 0)
+
+        if self.money >= self.selected_tower.get_upgrade_power_cost():
+            power_print_color = (255, 255, 255)
+        else:
+            power_print_color = (255, 0, 0)
+
+        range_cost_font = pygame.font.Font("freesansbold.ttf", 24)
+        range_cost_font = range_cost_font.render(str(self.selected_tower.get_upgrade_range_cost()), True, range_print_color)
+        self.win.blit(range_cost_font, (270, 668))
+
+        speed_cost_font = pygame.font.Font("freesansbold.ttf", 24)
+        speed_cost_font = speed_cost_font.render(str(self.selected_tower.get_upgrade_speed_cost()), True, speed_print_color)
+        self.win.blit(speed_cost_font, (566, 668))
+
+        power_cost_font = pygame.font.Font("freesansbold.ttf", 24)
+        power_cost_font = power_cost_font.render(str(self.selected_tower.get_upgrade_power_cost()), True, power_print_color)
+        self.win.blit(power_cost_font, (861, 668))
+
+    def print_tower_levels(self):
+        range_level_font = pygame.font.Font("freesansbold.ttf", 24)
+        range_level_font = range_level_font.render(str(self.selected_tower.get_range_level()), True, (255, 255, 255))
+        self.win.blit(range_level_font, (270, 583))
+
+        speed_level_font = pygame.font.Font("freesansbold.ttf", 24)
+        speed_level_font = speed_level_font.render(str(self.selected_tower.get_speed_level()), True, (255, 255, 255))
+        self.win.blit(speed_level_font, (566, 583))
+
+        power_level_font = pygame.font.Font("freesansbold.ttf", 24)
+        power_level_font = power_level_font.render(str(self.selected_tower.get_power_level()), True, (255, 255, 255))
+        self.win.blit(power_level_font, (861, 583))
+
+    # Updating
+    def update_stats(self):
+        self.enemies = len(self.game_map.get_enemies())
+
+    # Handling
     def handle_tower_attack(self):
         for tower in self.game_map.get_all_towers():
             tower.set_aimed_enemy(self.game_map.get_enemies())
@@ -282,31 +390,7 @@ class Game:
             projectile.handle_impact(self.game_map.get_enemies())
         self.impacted_projectiles = list()
 
-    def draw_enemies(self, win):
-        for enemy in self.game_map.get_enemies():
-            if enemy.get_life() <= 0:
-                self.game_map.remove_enemy(enemy)
-                self.money += enemy.kill_reward
-            win.blit(enemy.get_symbol(), enemy.get_draw_pos())
-            enemy.draw_life(win)
-            if not enemy.move_forward():
-                self.game_map.remove_enemy(enemy)
-                self.lives -= 1
-
-    def draw_towers(self, win):
-        for tower in self.game_map.get_all_towers():
-            win.blit(tower.get_symbol(), tower.get_draw_pos())
-
-    def draw_tower_to_build(self, win, m_pos):
-        x, y = m_pos
-        if type(self.tower_to_build) == LaserTower:
-            x -= 10
-            y -= 10
-        else:
-            x -= 22
-            y -= 22
-        win.blit(self.tower_to_build.get_symbol(), (x, y))
-
+    # Creating Enemies
     def spawn_enemies(self):
         if len(self.enemies_to_enter) > 0:
             enemy = self.enemies_to_enter.pop()
@@ -330,18 +414,11 @@ class Game:
                 enemy.increase_max_hp_by(self.wave * 2)
             self.enemies_to_enter.append(enemy)
 
-    def show_selected_tower(self):
-        if self.selected_tower is not None:
-            self.selected_tower.draw_range(self.win)
-
+    # Removing
     def remove_tower(self, tower):
         self.game_map.remove_tower(tower)
 
-    def draw_ingame_menu(self):
-        self.win.blit(self.ingame_menu.get_symbol(), self.ingame_menu.get_draw_pos())
-        for button in self.ingame_menu.get_buttons():
-            self.win.blit(button.get_symbol(), button.get_draw_pos())
-
+    # General Functions
     def resume_game(self):
         self.pause = False
 

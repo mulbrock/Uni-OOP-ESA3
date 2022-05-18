@@ -7,12 +7,15 @@ from entities.towers.projectile import Projectile
 
 class BombTower(Tower):
 
+    COST = 10
+
     def __init__(self, _pos: tuple):
         _symbol_path = "assets/img/towers/bomb_1.png"
         _range = 150
         _cool_down = 3.0
         _attack_power = 1
-        _cost = 10
+
+        _cost = BombTower.COST
         super().__init__(_pos, _symbol_path, _range, _cool_down, _attack_power, _cost)
 
         self.projectiles = list()
