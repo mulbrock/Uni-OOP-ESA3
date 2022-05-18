@@ -10,12 +10,13 @@ class BombTower(Tower):
     COST = 10
 
     def __init__(self, _pos: tuple):
-        _symbol = pygame.image.load("assets/img/towers/bomb_1.png")
+        _symbol_path = "assets/img/towers/bomb_1.png"
         _range = 150
         _cool_down = 3.0
         _attack_power = 1
+
         _cost = BombTower.COST
-        super().__init__(_pos, _symbol, _range, _cool_down, _attack_power, _cost)
+        super().__init__(_pos, _symbol_path, _range, _cool_down, _attack_power, _cost)
 
         self.projectiles = list()
         self.position_to_attack = (0, 0)
@@ -26,7 +27,7 @@ class BombTower(Tower):
                 self.timer = time.time()
                 self.position_to_attack = self.aimed_enemy.get_center()
 
-                projectile = Projectile(self.center, self.position_to_attack, self.attack_power)
+                projectile = Projectile(self.center, self.position_to_attack, self.attack_power, self.attack_power_level)
                 self.projectiles.append(projectile)
                 return True
         return False
