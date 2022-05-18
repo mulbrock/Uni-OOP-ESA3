@@ -24,7 +24,7 @@ class BombTower(Tower):
                 self.timer = time.time()
                 self.position_to_attack = self.aimed_enemy.get_center()
 
-                projectile = Projectile(self.center, self.position_to_attack, self.attack_power)
+                projectile = Projectile(self.center, self.position_to_attack, self.attack_power, self.attack_power_level)
                 self.projectiles.append(projectile)
                 return True
         return False

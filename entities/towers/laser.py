@@ -23,5 +23,18 @@ class LaserTower(Tower):
 
     def draw_attack(self, win):
         if self.aimed_enemy is not None:
-            pos = self.aimed_enemy.get_center()
-            pygame.draw.line(win, (0, 0, 255), self.get_center(), pos, 2)
+            enemy_pos = self.aimed_enemy.get_center()
+            beam_origin_pos = self.get_center()
+
+            beam_num = int(self.attack_power_level / 3) + 1
+
+            for beam in range(1, beam_num + 1):
+                print(beam)
+                if beam == 1:
+
+                    pygame.draw.line(win, (0, 255, 255), beam_origin_pos, enemy_pos, (2))
+                if beam == 2:
+
+                    enemy_pos = enemy_pos[0] - 10, enemy_pos[1] - 10
+                    pygame.draw.line(win, (0, 0, 255), beam_origin_pos, enemy_pos, (2))
+

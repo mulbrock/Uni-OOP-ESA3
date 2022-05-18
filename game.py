@@ -85,7 +85,7 @@ class Game:
                 self.main_menu.show_menu()
             else:
                 # Timer
-                clock.tick(90)
+                clock.tick(60)
                 self.win.blit(bg, (0, 0))
 
                 # Enemies: Spawn and Creation

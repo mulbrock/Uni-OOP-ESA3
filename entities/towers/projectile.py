@@ -5,8 +5,9 @@ from entities.entity import Entity
 
 class Projectile(Entity):
 
-    def __init__(self, starting_pos, dest_pos, attack_power):
-        _symbol_path = "assets/img/projectiles/projectile_9.png"
+    def __init__(self, starting_pos, dest_pos, attack_power, level):
+        self.level = level
+        _symbol_path = "assets/img/projectiles/projectile_{}.png".format(level)
         super().__init__(starting_pos, _symbol_path)
         self.destination_pos = dest_pos
         self.impact_range = 60
