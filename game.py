@@ -243,6 +243,7 @@ class Game:
             if enemy.get_life() <= 0:
                 self.game_map.remove_enemy(enemy)
                 self.money += enemy.kill_reward
+                self.kills += 1
             win.blit(enemy.get_symbol(), enemy.get_draw_pos())
             enemy.draw_life(win)
             if not enemy.move_forward():
