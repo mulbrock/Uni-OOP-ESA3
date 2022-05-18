@@ -78,8 +78,17 @@ class Tower(Entity):
         self.speed_level += 1
         self.speed_upgrade_cost += 2
 
-    def get_upgrade_cost(self):
+    def get_upgrade_speed_cost(self):
         return self.speed_upgrade_cost
 
     def draw_range(self, win):
         pygame.draw.circle(win, [0, 200, 200, 50], self.get_center(), self.range, 2)
+
+    def get_range_level(self):
+        return self.range_level
+
+    def get_speed_level(self):
+        return self.speed_level
+
+    def get_power_level(self):
+        return self.attack_power_level
