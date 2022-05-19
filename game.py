@@ -117,9 +117,12 @@ class Game:
                     if event.type == MOUSEBUTTONDOWN:
                         left, middle, right = pygame.mouse.get_pressed()
 
-                        # Game Over
-                        if self.lives == 0:
-                            pass
+                        # Unselect Tower to Build / Destroy
+                        if right and (self.building_bomb or self.building_laser or self.destroy_mode):
+                            self.tower_to_build = None
+                            self.building_laser = False
+                            self.building_bomb = False
+                            self.destroy_mode = False
 
                         # Destroy Tower
                         if left and self.destroy_mode:
@@ -181,7 +184,6 @@ class Game:
                                     update_cost = self.selected_tower.get_upgrade_range_cost()
                                     if self.money >= update_cost:
                                         if self.selected_tower.upgrade_range():
-                                            print('upgrade range')
                                             self.money -= update_cost
                             else:
                                 if self.money >= LaserTower.COST:
@@ -195,7 +197,6 @@ class Game:
                                     update_cost = self.selected_tower.get_upgrade_speed_cost()
                                     if self.money >= update_cost:
                                         if self.selected_tower.upgrade_speed():
-                                            print('upgrade speed')
                                             self.money -= update_cost
                             else:
                                 if self.money >= BombTower.COST:
