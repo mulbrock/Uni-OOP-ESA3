@@ -10,9 +10,7 @@ class Button:
         self.pressed_symbol = pygame.image.load("assets/img/buttons/{}_pressed.png".format(button_name)).convert_alpha()
         self.size = self.symbol.get_size()
         self.draw_pos = draw_pos
-
-    def click(self):
-        raise NotImplementedError
+        self.pressed = False
 
     def get_button_name(self):
         return self.button_name
@@ -44,6 +42,8 @@ class Button:
 
     def button_down(self):
         self.symbol = self.pressed_symbol
+        self.pressed = True
 
     def button_up(self):
         self.symbol = self.unpressed_symbol
+        self.pressed = False

@@ -7,15 +7,8 @@ class Menu:
         self.draw_pos = draw_pos
         self.background = bg
 
-        self.buttons = {}
         self.vertical_padding = 25
         self.horizontal_padding = 25
-
-    def get_buttons(self):
-        return self.buttons
-
-    def add_button(self, button):
-        self.buttons.update({button.get_button_name(): button})
 
     def calculate_vertical_btn_draw_pos(self, button, button_list):
         list_len = len(button_list)
