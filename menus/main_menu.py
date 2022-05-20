@@ -61,6 +61,7 @@ class MainMenu(Menu):
                     for button in self.buttons:
                         if button.click_check(m_pos) and button.pressed:
                             self.button_click(button)
+                        button.button_up()
 
             # Redisplay
             pygame.display.update()
