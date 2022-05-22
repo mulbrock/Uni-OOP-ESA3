@@ -75,7 +75,7 @@ class MainMenu(Menu):
             self.resume_game_button_clicked()
         elif name == 'mbtn_tutorial':
             self.tutorial_button_clicked()
-        elif name == 'mbtn_scoreboard':
+        elif name == 'mbtn_ranking':
             self.scoreboard_button_clicked()
         elif name == 'mbtn_quit':
             self.end_game()

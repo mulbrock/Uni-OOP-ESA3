@@ -63,6 +63,7 @@ class Tower(Entity):
             self.range += 5
             self.range_level += 1
             self.range_upgrade_cost += 2
+            self.update_symbol()
             return True
         return False
 
@@ -74,7 +75,6 @@ class Tower(Entity):
             self.attack_power += 1
             self.attack_power_level += 1
             self.attack_power_upgrade_cost += 2
-            self.update_symbol()
             return True
         return False
 
@@ -93,7 +93,7 @@ class Tower(Entity):
 
         path = self.get_symbol_path()
 
-        new_symbol_path = re.sub("\d", str(self.attack_power_level), path)
+        new_symbol_path = re.sub("\d", str(self.range_level), path)
         self.set_symbol_path(new_symbol_path)
 
 
