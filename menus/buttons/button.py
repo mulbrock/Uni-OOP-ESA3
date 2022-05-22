@@ -3,7 +3,7 @@ import pygame
 
 class Button:
 
-    def __init__(self, button_name, draw_pos=(0, 0)):
+    def __init__(self, button_name, draw_pos=(0, 0), inactive=False):
         self.button_name = button_name
         self.symbol = pygame.image.load("assets/img/buttons/{}.png".format(button_name)).convert_alpha()
         self.unpressed_symbol = pygame.image.load("assets/img/buttons/{}.png".format(button_name)).convert_alpha()
@@ -11,6 +11,16 @@ class Button:
         self.size = self.symbol.get_size()
         self.draw_pos = draw_pos
         self.pressed = False
+        self.inactive = inactive
+        if self.inactive:
+            self.display_inactive()
+
+    def display_inactive(self):
+        self.symbol = pygame.image.load("assets/img/buttons/{}_inactive.png".format(self.button_name)).convert_alpha()
+
+    def activate(self):
+        self.inactive = False
+        self.symbol = pygame.image.load("assets/img/buttons/{}.png".format(self.button_name)).convert_alpha()
 
     def get_button_name(self):
         return self.button_name
@@ -41,9 +51,11 @@ class Button:
         return self.size[1]
 
     def button_down(self):
-        self.symbol = self.pressed_symbol
-        self.pressed = True
+        if not self.inactive:
+            self.symbol = self.pressed_symbol
+            self.pressed = True
 
     def button_up(self):
-        self.symbol = self.unpressed_symbol
-        self.pressed = False
+        if not self.inactive:
+            self.symbol = self.unpressed_symbol
+            self.pressed = False

@@ -19,7 +19,7 @@ class MainMenu(Menu):
         draw_pos = (0, 0)
 
         self.buttons = [Button('mbtn_new_game', draw_pos=(50, 220)),
-                        Button('mbtn_continue', draw_pos=(537, 220)),
+                        Button('mbtn_continue', draw_pos=(537, 220), inactive=True),
                         Button('mbtn_tutorial', draw_pos=(50, 390)),
                         Button('mbtn_ranking', draw_pos=(537, 390)),
                         Button('mbtn_quit', draw_pos=(537, 560))]
@@ -83,6 +83,7 @@ class MainMenu(Menu):
             print('No Button Clicked')
 
     def new_game_button_clicked(self):
+        self.buttons[1].activate()
         self.current_game = None
         self.current_game = Game(self.win, self)
         self.menu_shown = False
