@@ -3,8 +3,8 @@ from pygame.locals import *
 
 from game import Game
 from menus.menu import Menu
-from menus.save_menu import SaveMenu
 from menus.buttons.button import Button
+from menus.leaderboard import Leaderboard
 
 
 class MainMenu(Menu):
@@ -27,10 +27,8 @@ class MainMenu(Menu):
         super().__init__(draw_pos, background)
 
         self.current_game = None
-        # self.init_buttons()
+        self.leaderboard = Leaderboard(self.win, self)
         self.menu_shown = True
-
-        self.save_menu = SaveMenu(self.win)
 
     def get_window(self):
         return self.win
@@ -76,7 +74,7 @@ class MainMenu(Menu):
         elif name == 'mbtn_tutorial':
             self.tutorial_button_clicked()
         elif name == 'mbtn_ranking':
-            self.scoreboard_button_clicked()
+            self.leaderboard_button_clicked()
         elif name == 'mbtn_quit':
             self.end_game()
         else:
@@ -99,8 +97,9 @@ class MainMenu(Menu):
     def tutorial_button_clicked(self):
         print('tutorial')
 
-    def scoreboard_button_clicked(self):
-        print('scoreboard')
+    def leaderboard_button_clicked(self):
+        self.menu_shown = False
+        self.leaderboard.show_leaderboard()
 
     def end_game(self):
         self.menu_shown = False
