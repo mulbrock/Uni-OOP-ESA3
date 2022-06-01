@@ -10,8 +10,8 @@ class Leaderboard(Menu):
         self.win = win
         self.leaderboard_shown = False
         self.main_menu = main_menu
-        self.score_list = []
-        self.name_list = []
+        self.entries = []
+        self.get_data()
 
         self.back_button = Button('lbtn_back', draw_pos=(844, 687))
         self.entry_images = [
@@ -27,43 +27,55 @@ class Leaderboard(Menu):
             pygame.image.load("assets/img/leaderboard/p10.png").convert_alpha()
         ]
 
-        self.entries = self.get_data()
         background = pygame.image.load("assets/img/leaderboard/leaderboard.png").convert_alpha()
         draw_pos = (0, 0)
         super().__init__(draw_pos, background)
 
     def get_lowest(self):
-        if len(self.score_list) < 10:
+        if len(self.entries) < 10:
             return 0
         else:
-            return self.score_list[9]
+            return self.entries[9]
 
     def get_data(self):
+        self.entries.clear()
         with open("assets/leaderboard_data.json", "r") as json_file:
             data = json.load(json_file)
             for entry in data["entries"]:
-                self.score_list.append(entry["kills"])
-                self.name_list.append(entry["name"])
-            print(self.score_list)
-        return data
+                self.entries.append(entry)
 
     def draw_scores(self):
         y = 102
-        for i in range(0, len(self.score_list)):
+        for i in range(0, len(self.entries)):
             self.win.blit(self.entry_images[i], (50, y))
 
             name_font = pygame.font.Font("assets/orbitron-black.otf", 24)
-            name_font = name_font.render(self.name_list[i], True, (255, 255, 255))
+            name_font = name_font.render(self.entries[i]["name"], True, (255, 255, 255))
             self.win.blit(name_font, (174, y+15))
 
             kills_font = pygame.font.Font("assets/orbitron-black.otf", 24)
-            kills_font = kills_font.render(str(self.score_list[i]), True, (255, 255, 255))
+            kills_font = kills_font.render(str(self.entries[i]["kills"]), True, (255, 255, 255))
             self.win.blit(kills_font, (625, y+15))
 
             y += 65
 
     def update_leaderboard(self, new_score):
-        pass
+        if len(self.entries) == 10:
+            pass
+        else:
+            self.entries.append({"name": "XYZ", "kills": new_score})
+            # updated_entries = '{"entries":' + str(sorted(self.entries, key=lambda d: d["kills"], reverse=True)) + '}'
+
+            updated_entries = {
+                "entries":
+                    sorted(self.entries, key=lambda d: d["kills"], reverse=True)
+            }
+
+            json_string = json.dumps(updated_entries)
+            with open("assets/leaderboard_data.json", "w") as json_file:
+                json_file.write(json_string)
+
+        self.get_data()
 
     def show_leaderboard(self):
         self.leaderboard_shown = True
