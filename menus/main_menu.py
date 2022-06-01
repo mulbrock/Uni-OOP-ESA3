@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-
+import json
 from game import Game
 from menus.menu import Menu
 from menus.buttons.button import Button
@@ -104,3 +104,7 @@ class MainMenu(Menu):
     def end_game(self):
         self.menu_shown = False
         exit(0)
+
+    def game_over(self):
+        self.current_game = False
+        self.buttons[1].deactivate()

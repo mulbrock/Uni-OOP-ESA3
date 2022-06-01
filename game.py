@@ -55,6 +55,10 @@ class Game:
         # Ingame Menu
         self.ingame_menu = IngameMenu()
 
+        # Game Over
+        self.game_over = False
+        self.game_over_overlay = pygame.image.load("assets/img/game_over.png").convert_alpha()
+
         # Stats
         self.money = 20
         self.lives = 20
@@ -81,7 +85,7 @@ class Game:
         clock = pygame.time.Clock()
 
         # Loop
-        while self.keep_going:
+        while self.keep_going and not self.game_over:
 
             if self.pause:
                 self.main_menu.show_menu()
@@ -89,6 +93,10 @@ class Game:
                 # Timer
                 clock.tick(60)
                 self.win.blit(bg, (0, 0))
+
+                # Game Over
+                if self.lives == 0:
+                    self.game_over = True
 
                 # Enemies: Spawn and Creation
                 if time.time() - self.timer >= self.spawn_cool_down and len(self.enemies_to_enter) > 0:
@@ -116,7 +124,7 @@ class Game:
                         self.keep_going = False
                         self.main_menu.end_game()
 
-                    if event.type == MOUSEBUTTONDOWN:
+                    elif event.type == MOUSEBUTTONDOWN:
                         left, middle, right = pygame.mouse.get_pressed()
 
                         # Unselect Tower to Build / Destroy
@@ -253,6 +261,25 @@ class Game:
                 self.all_enemies_killed = False
 
             # Redisplay
+            pygame.display.update()
+
+        while self.keep_going and self.game_over:
+            self.win.blit(bg, (0, 0))
+            self.win.blit(self.game_over_overlay, (0, 0))
+
+            self.main_menu.game_over()
+
+            m_pos = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    self.keep_going = False
+                    self.main_menu.end_game()
+
+                elif event.type == MOUSEBUTTONUP:
+                    self.keep_going = False
+                    self.main_menu.show_menu()
+
             pygame.display.update()
 
     # Drawing

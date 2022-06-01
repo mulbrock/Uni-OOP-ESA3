@@ -22,6 +22,10 @@ class Button:
         self.inactive = False
         self.symbol = pygame.image.load("assets/img/buttons/{}.png".format(self.button_name)).convert_alpha()
 
+    def deactivate(self):
+        self.inactive = True
+        self.symbol = pygame.image.load("assets/img/buttons/{}_inactive.png".format(self.button_name)).convert_alpha()
+
     def get_button_name(self):
         return self.button_name
 
