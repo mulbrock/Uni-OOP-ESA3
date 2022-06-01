@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-import json
 from game import Game
 from menus.menu import Menu
 from menus.buttons.button import Button
@@ -29,6 +28,8 @@ class MainMenu(Menu):
         self.current_game = None
         self.leaderboard = Leaderboard(self.win, self)
         self.menu_shown = True
+
+        self.new_score = 0
 
     def get_window(self):
         return self.win
@@ -104,6 +105,10 @@ class MainMenu(Menu):
     def end_game(self):
         self.menu_shown = False
         exit(0)
+
+    def set_score(self, kills):
+        if kills > self.leaderboard.get_lowest():
+            self.leaderboard.update_leaderboard(kills)
 
     def game_over(self):
         self.current_game = False

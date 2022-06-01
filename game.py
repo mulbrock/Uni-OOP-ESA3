@@ -97,6 +97,7 @@ class Game:
                 # Game Over
                 if self.lives == 0:
                     self.game_over = True
+                    self.main_menu.set_score(self.kills)
 
                 # Enemies: Spawn and Creation
                 if time.time() - self.timer >= self.spawn_cool_down and len(self.enemies_to_enter) > 0:
