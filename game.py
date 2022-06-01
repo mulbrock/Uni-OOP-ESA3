@@ -61,7 +61,7 @@ class Game:
 
         # Stats
         self.money = 20
-        self.lives = 1
+        self.lives = 20
         self.wave = 1
         self.kills = 0
         self.enemies = 0

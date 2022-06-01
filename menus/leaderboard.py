@@ -60,20 +60,21 @@ class Leaderboard(Menu):
             y += 65
 
     def update_leaderboard(self, new_score):
-        if len(self.entries) == 10:
-            pass
-        else:
-            self.entries.append({"name": "XYZ", "kills": new_score})
-            # updated_entries = '{"entries":' + str(sorted(self.entries, key=lambda d: d["kills"], reverse=True)) + '}'
+        self.entries.append({"name": "XYZ", "kills": new_score})
 
-            updated_entries = {
-                "entries":
-                    sorted(self.entries, key=lambda d: d["kills"], reverse=True)
-            }
+        self.entries = sorted(self.entries, key=lambda d: d["kills"], reverse=True)
 
-            json_string = json.dumps(updated_entries)
-            with open("assets/leaderboard_data.json", "w") as json_file:
-                json_file.write(json_string)
+        if len(self.entries) == 11:
+            del self.entries[10]
+
+        updated_entries = {
+            "entries":
+                self.entries
+        }
+
+        json_string = json.dumps(updated_entries)
+        with open("assets/leaderboard_data.json", "w") as json_file:
+            json_file.write(json_string)
 
         self.get_data()
 
