@@ -47,7 +47,7 @@ class Game:
         self.generate_enemies_cool_down = 5.0
         self.all_enemies_killed = True
         self.enemies_to_enter = list()
-        self.amount = 34
+        self.amount = 9
 
         # Main Menu
         self.main_menu = main_menu
@@ -58,7 +58,7 @@ class Game:
         # Stats
         self.money = 20
         self.lives = 20
-        self.wave = 8
+        self.wave = 1
         self.kills = 0
         self.enemies = 0
 
