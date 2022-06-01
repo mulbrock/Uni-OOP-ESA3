@@ -47,6 +47,7 @@ class Game:
         self.generate_enemies_cool_down = 5.0
         self.all_enemies_killed = True
         self.enemies_to_enter = list()
+        self.amount = 34
 
         # Main Menu
         self.main_menu = main_menu
@@ -57,7 +58,7 @@ class Game:
         # Stats
         self.money = 20
         self.lives = 20
-        self.wave = 1
+        self.wave = 8
         self.kills = 0
         self.enemies = 0
 
@@ -411,23 +412,129 @@ class Game:
             enemy = self.enemies_to_enter.pop()
             if enemy:
                 self.game_map.add_enemy(enemy)
-        else:
-            self.wave += 1
 
     def generate_enemies(self):
-        amount = 20
-        amount *= self.wave
-        for i in range(1, amount):
-            if i % 4 == 0:
-                enemy = EnemyTwo(self.game_map.get_path())
-                enemy.increase_max_hp_by(self.wave * 3)
-            elif i % (amount-1) == 0:
-                enemy = EnemyThree(self.game_map.get_path())
-                enemy.increase_max_hp_by(self.wave * 6)
-            else:
+        if self.wave < 5:
+            self.amount += self.wave
+        else:
+            self.amount += 5
+
+        # 10 Enemies
+        if self.wave == 1:
+            for i in range(0, self.amount):
                 enemy = EnemyOne(self.game_map.get_path())
                 enemy.increase_max_hp_by(self.wave * 2)
+                self.enemies_to_enter.append(enemy)
+
+        # 12 Enemies
+        elif self.wave == 2:
+            for i in range(0, self.amount - 1):
+                enemy = EnemyOne(self.game_map.get_path())
+                enemy.increase_max_hp_by(self.wave * 2)
+                self.enemies_to_enter.append(enemy)
+            enemy = EnemyTwo(self.game_map.get_path())
+            enemy.increase_max_hp_by(self.wave * 3)
             self.enemies_to_enter.append(enemy)
+
+        # 15 Enemies
+        elif self.wave == 3:
+            for i in range(0, self.amount):
+                if i > 0 and (i+1) % 5 == 0:
+                    enemy = EnemyTwo(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 3)
+                    self.enemies_to_enter.append(enemy)
+                else:
+                    enemy = EnemyOne(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 2)
+                    self.enemies_to_enter.append(enemy)
+
+        # 19 Enemies
+        elif self.wave == 4:
+            for i in range(0, self.amount):
+                if i == self.amount-1:
+                    enemy = EnemyThree(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 6)
+                elif i > 0 and (i+1) % 4 == 0:
+                    enemy = EnemyTwo(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 3)
+                else:
+                    enemy = EnemyOne(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 2)
+                self.enemies_to_enter.append(enemy)
+
+        # 24 Enemies
+        elif self.wave == 5:
+            for i in range(0, self.amount):
+                if i == self.amount - 1 or i == self.amount / 2:
+                    enemy = EnemyThree(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 6)
+                elif i % 3 == 0:
+                    enemy = EnemyTwo(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 3)
+                else:
+                    enemy = EnemyOne(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 2)
+                self.enemies_to_enter.append(enemy)
+
+        # 29 Enemies
+        elif self.wave == 6:
+            for i in range(0, self.amount):
+                if i == self.amount - 1 or i == int(self.amount / 3) or i == int((self.amount * 2) / 3) or i == 0:
+                    enemy = EnemyThree(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 6)
+                elif i % 2 == 0:
+                    enemy = EnemyTwo(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 3)
+                else:
+                    enemy = EnemyOne(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 2)
+                self.enemies_to_enter.append(enemy)
+
+        # 34 Enemies
+        elif self.wave == 7:
+            for i in range(0, self.amount):
+                if i > (self.amount * 2) / 3:
+                    enemy = EnemyThree(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 6)
+                elif i > self.amount / 3:
+                    enemy = EnemyTwo(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 3)
+                else:
+                    enemy = EnemyOne(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 2)
+                self.enemies_to_enter.append(enemy)
+
+        # 39 Enemies
+        elif self.wave == 8:
+            for i in range(0, self.amount):
+                if i < 3 or i > self.amount - 4:
+                    enemy = EnemyOne(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 2)
+                elif i < 8 or i > self.amount - 9 or i == 20:
+                    enemy = EnemyTwo(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 3)
+                else:
+                    enemy = EnemyThree(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 6)
+                self.enemies_to_enter.append(enemy)
+
+        # 44 Enemies
+        elif self.wave == 9:
+            for i in range(0, self.amount):
+                if i % 2 == 0 or i % 3 == 0:
+                    enemy = EnemyThree(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 6)
+                else:
+                    enemy = EnemyTwo(self.game_map.get_path())
+                    enemy.increase_max_hp_by(self.wave * 3)
+                self.enemies_to_enter.append(enemy)
+
+        # 49 Enemies +
+        else:
+            for i in range(0, self.amount):
+                enemy = EnemyThree(self.game_map.get_path())
+                enemy.increase_max_hp_by(self.wave * 6)
+                self.enemies_to_enter.append(enemy)
 
     # Removing
     def remove_tower(self, tower):
