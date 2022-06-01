@@ -331,23 +331,23 @@ class Game:
 
     # Printing Stats and Costs
     def print_stats(self):
-        lives_font = pygame.font.Font("freesansbold.ttf", 24)
+        lives_font = pygame.font.Font("assets/orbitron-black.otf", 28)
         lives_font = lives_font.render(str(self.lives), True, (255, 255, 255))
         self.win.blit(lives_font, (75, 726))
 
-        coin_font = pygame.font.Font("freesansbold.ttf", 24)
+        coin_font = pygame.font.Font("assets/orbitron-black.otf", 28)
         coin_font = coin_font.render(str(self.money), True, (255, 255, 255))
         self.win.blit(coin_font, (250, 726))
 
-        kill_font = pygame.font.Font("freesansbold.ttf", 24)
+        kill_font = pygame.font.Font("assets/orbitron-black.otf", 28)
         kill_font = kill_font.render(str(self.kills), True, (255, 255, 255))
         self.win.blit(kill_font, (425, 726))
 
-        enemy_font = pygame.font.Font("freesansbold.ttf", 24)
+        enemy_font = pygame.font.Font("assets/orbitron-black.otf", 28)
         enemy_font = enemy_font.render(str(self.enemies), True, (255, 255, 255))
         self.win.blit(enemy_font, (600, 726))
 
-        wave_font = pygame.font.Font("freesansbold.ttf", 24)
+        wave_font = pygame.font.Font("assets/orbitron-black.otf", 28)
         wave_font = wave_font.render(str(self.wave), True, (255, 255, 255))
         self.win.blit(wave_font, (775, 726))
 
