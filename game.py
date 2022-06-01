@@ -94,6 +94,7 @@ class Game:
                     self.spawn_enemies()
                     self.timer = time.time()
                 elif time.time() - self.timer >= self.generate_enemies_cool_down and self.all_enemies_killed:
+                    self.wave += 1
                     self.timer = time.time()
                     self.generate_enemies()
                     self.enemies_to_enter.reverse()
