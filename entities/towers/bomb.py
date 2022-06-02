@@ -7,7 +7,7 @@ from entities.towers.projectile import Projectile
 
 class BombTower(Tower):
 
-    COST = 10
+    cost = 10
 
     def __init__(self, _pos: tuple):
         _symbol_path = "assets/img/towers/bomb_1.png"
@@ -15,7 +15,7 @@ class BombTower(Tower):
         _cool_down = 3.0
         _attack_power = 1
 
-        _cost = BombTower.COST
+        _cost = BombTower.cost
         super().__init__(_pos, _symbol_path, _range, _cool_down, _attack_power, _cost)
 
         self.projectiles = list()
@@ -44,3 +44,11 @@ class BombTower(Tower):
         for impacted in impacted_projectiles:
             self.projectiles.remove(impacted)
         return impacted_projectiles
+
+    def upgrade_speed(self):
+        if self.speed_level < 10:
+            self.speed_upgrade_cost += self.speed_level
+            self.cool_down_time -= 0.15
+            self.speed_level += 1
+            return True
+        return False

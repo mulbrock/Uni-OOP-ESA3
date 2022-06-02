@@ -1,4 +1,3 @@
-import math
 import time
 import pygame
 from pygame.locals import *
@@ -150,8 +149,9 @@ class Game:
                                 self.tower_to_build.set_center(m_pos)
                                 if self.active_building_area.is_tower_in_building_area(self.tower_to_build):
                                     if self.active_building_area.is_building_space_empty(self.tower_to_build):
-                                        self.money -= self.tower_to_build.COST
+                                        self.money -= self.tower_to_build.cost
                                         self.active_building_area.add_building(self.tower_to_build, m_pos)
+                                        self.tower_to_build.__class__.cost += 1
                                         self.building_bomb = False
                                         self.building_laser = False
                                         self.button_up_after_build = True
@@ -197,7 +197,7 @@ class Game:
                                         if self.selected_tower.upgrade_range():
                                             self.money -= update_cost
                             else:
-                                if self.money >= LaserTower.COST:
+                                if self.money >= LaserTower.cost:
                                     self.building_bomb = False
                                     self.destroy_mode = False
                                     self.building_laser = True
@@ -210,7 +210,7 @@ class Game:
                                         if self.selected_tower.upgrade_speed():
                                             self.money -= update_cost
                             else:
-                                if self.money >= BombTower.COST:
+                                if self.money >= BombTower.cost:
                                     self.building_laser = False
                                     self.destroy_mode = False
                                     self.building_bomb = True
@@ -270,7 +270,7 @@ class Game:
 
             self.main_menu.game_over()
 
-            m_pos = pygame.mouse.get_pos()
+            # m_pos = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -352,10 +352,10 @@ class Game:
         self.win.blit(wave_font, (775, 726))
 
     def print_building_cost(self):
-        if self.money >= BombTower.COST:
+        if self.money >= BombTower.cost:
             laser_print_color = (255, 255, 255)
             bomb_print_color = (255, 255, 255)
-        elif self.money >= LaserTower.COST:
+        elif self.money >= LaserTower.cost:
             laser_print_color = (255, 255, 255)
             bomb_print_color = (255, 0, 0)
         else:
@@ -363,11 +363,11 @@ class Game:
             bomb_print_color = (255, 0, 0)
 
         laser_cost_font = pygame.font.Font("freesansbold.ttf", 24)
-        laser_cost_font = laser_cost_font.render(str(LaserTower.COST), True, laser_print_color)
+        laser_cost_font = laser_cost_font.render(str(LaserTower.cost), True, laser_print_color)
         self.win.blit(laser_cost_font, (277, 668))
 
         bomb_cost_font = pygame.font.Font("freesansbold.ttf", 24)
-        bomb_cost_font = bomb_cost_font.render(str(BombTower.COST), True, bomb_print_color)
+        bomb_cost_font = bomb_cost_font.render(str(BombTower.cost), True, bomb_print_color)
         self.win.blit(bomb_cost_font, (566, 668))
 
     def print_upgrade_cost(self):

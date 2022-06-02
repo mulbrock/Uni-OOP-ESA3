@@ -60,10 +60,9 @@ class Tower(Entity):
 
     def upgrade_range(self):
         if self.range_level < 10:
+            self.range_upgrade_cost += self.range_level
             self.range += 5
             self.range_level += 1
-            self.range_upgrade_cost += 2
-            self.update_symbol()
             return True
         return False
 
@@ -72,9 +71,10 @@ class Tower(Entity):
 
     def upgrade_power(self):
         if self.attack_power_level < 10:
+            self.attack_power_upgrade_cost += self.attack_power_level
             self.attack_power += 1
             self.attack_power_level += 1
-            self.attack_power_upgrade_cost += 2
+            self.update_symbol()
             return True
         return False
 
@@ -82,12 +82,8 @@ class Tower(Entity):
         return self.attack_power_upgrade_cost
 
     def upgrade_speed(self):
-        if self.speed_level < 10:
-            self.cool_down_time -= 0.01
-            self.speed_level += 1
-            self.speed_upgrade_cost += 2
-            return True
-        return False
+        # to be overridden
+        pass
 
     def update_symbol(self):
 
@@ -95,7 +91,6 @@ class Tower(Entity):
 
         new_symbol_path = re.sub("\d", str(self.range_level), path)
         self.set_symbol_path(new_symbol_path)
-
 
     def get_upgrade_speed_cost(self):
         return self.speed_upgrade_cost

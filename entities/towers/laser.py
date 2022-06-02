@@ -5,7 +5,7 @@ from entities.towers.tower import Tower
 
 class LaserTower(Tower):
 
-    COST = 4
+    cost = 4
 
     def __init__(self, pos: tuple):
         _symbol_path = "assets/img/towers/laser_1.png"
@@ -13,7 +13,7 @@ class LaserTower(Tower):
         _cool_down = 0.5
         _attack_power = 0.5
 
-        _cost = LaserTower.COST
+        _cost = LaserTower.cost
         super().__init__(pos, _symbol_path, _range, _cool_down, _attack_power, _cost)
 
     def attack(self):
@@ -50,3 +50,11 @@ class LaserTower(Tower):
                 pygame.draw.line(win, (255, 0, 0), beam_origin_pos, enemy_pos, 10)
             else:
                 pygame.draw.line(win, (255, 0, 0), beam_origin_pos, enemy_pos, 13)
+
+    def upgrade_speed(self):
+        if self.speed_level < 10:
+            self.speed_upgrade_cost += self.speed_level
+            self.cool_down_time -= 0.02
+            self.speed_level += 1
+            return True
+        return False
