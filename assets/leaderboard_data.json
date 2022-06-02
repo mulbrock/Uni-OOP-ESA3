@@ -1,1 +1,42 @@
-{"entries": []}
+{"entries": [
+  {
+    "name": "Alfred",
+    "kills": 20
+  },
+  {
+    "name": "Berta",
+    "kills": 18
+  },
+  {
+    "name": "Christian",
+    "kills": 16
+  },
+  {
+    "name": "Daisy",
+    "kills": 14
+  },
+  {
+    "name": "Emil",
+    "kills": 12
+  },
+  {
+    "name": "Frieda",
+    "kills": 10
+  },
+  {
+    "name": "Günther",
+    "kills": 8
+  },
+  {
+    "name": "Hermine",
+    "kills": 6
+  },
+  {
+    "name": "Ingo",
+    "kills": 4
+  },
+  {
+    "name": "Jasmin",
+    "kills": 2
+  }
+]}

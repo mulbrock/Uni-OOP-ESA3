@@ -35,7 +35,7 @@ class Leaderboard(Menu):
         if len(self.entries) < 10:
             return 0
         else:
-            return self.entries[9]
+            return self.entries[9]["kills"]
 
     def get_data(self):
         self.entries.clear()
