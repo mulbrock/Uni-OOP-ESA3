@@ -5,12 +5,12 @@ from entities.entity import Entity
 
 class Enemy(Entity):
 
-    def __init__(self, _path, _hp, _symbol):
+    def __init__(self, _path, _hp, _symbol, _level):
         super().__init__(_path[0], _symbol)
 
         self.max_hp = _hp
         self.hp = _hp
-        self.kill_reward = int(self.max_hp/2)
+        self.kill_reward = int(_level * 2)
 
         self.path = _path
         self.path_stage = 0

@@ -89,7 +89,7 @@ class Tower(Entity):
 
         path = self.get_symbol_path()
 
-        new_symbol_path = re.sub("\d", str(self.range_level), path)
+        new_symbol_path = re.sub("\d", str(self.attack_power_level), path)
         self.set_symbol_path(new_symbol_path)
 
     def get_upgrade_speed_cost(self):
