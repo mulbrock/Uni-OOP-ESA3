@@ -4,6 +4,7 @@ from game import Game
 from menus.menu import Menu
 from menus.buttons.button import Button
 from menus.leaderboard import Leaderboard
+from menus.howto import Howto
 
 
 class MainMenu(Menu):
@@ -27,6 +28,7 @@ class MainMenu(Menu):
 
         self.current_game = None
         self.leaderboard = Leaderboard(self.win, self)
+        self.howto = Howto(self.win, self)
         self.menu_shown = True
 
         self.new_score = 0
@@ -96,7 +98,8 @@ class MainMenu(Menu):
             self.menu_shown = False
 
     def tutorial_button_clicked(self):
-        print('tutorial')
+        self.menu_shown = False
+        self.howto.show_howto()
 
     def leaderboard_button_clicked(self):
         self.menu_shown = False
