@@ -139,6 +139,7 @@ class Game:
                             for t in self.game_map.get_all_towers():
                                 if t.click_check(m_pos):
                                     self.remove_tower(t)
+                                    t.decrease_cost()
                                     if self.selected_tower == t:
                                         self.selected_tower = None
                                     break
@@ -151,7 +152,7 @@ class Game:
                                     if self.active_building_area.is_building_space_empty(self.tower_to_build):
                                         self.money -= self.tower_to_build.cost
                                         self.active_building_area.add_building(self.tower_to_build, m_pos)
-                                        self.tower_to_build.__class__.cost += 1
+                                        self.tower_to_build.increase_cost()
                                         self.building_bomb = False
                                         self.building_laser = False
                                         self.button_up_after_build = True
@@ -566,6 +567,7 @@ class Game:
 
     # Removing
     def remove_tower(self, tower):
+        self.money += tower.redeem_coins()
         self.game_map.remove_tower(tower)
 
     # General Functions

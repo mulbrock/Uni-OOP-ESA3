@@ -52,3 +52,12 @@ class BombTower(Tower):
             self.speed_level += 1
             return True
         return False
+
+    def increase_cost(self):
+        BombTower.cost += 1
+
+    def decrease_cost(self):
+        BombTower.cost -= 1
+
+    def redeem_coins(self):
+        return BombTower.cost - 1

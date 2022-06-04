@@ -58,3 +58,12 @@ class LaserTower(Tower):
             self.speed_level += 1
             return True
         return False
+
+    def increase_cost(self):
+        LaserTower.cost += 1
+
+    def decrease_cost(self):
+        LaserTower.cost -= 1
+
+    def redeem_coins(self):
+        return LaserTower.cost - 1
