@@ -27,7 +27,8 @@ class Leaderboard(Menu):
             pygame.image.load("assets/img/leaderboard/p10.png").convert_alpha()
         ]
 
-        background = pygame.image.load("assets/img/leaderboard/leaderboard.png").convert_alpha()
+        background = pygame.image.load("assets/img/leaderboard/leaderboard.png").\
+            convert_alpha()
         draw_pos = (0, 0)
         super().__init__(draw_pos, background)
 
@@ -54,7 +55,8 @@ class Leaderboard(Menu):
             self.win.blit(name_font, (174, y+15))
 
             kills_font = pygame.font.Font("assets/orbitron-black.otf", 24)
-            kills_font = kills_font.render(str(self.entries[i]["kills"]), True, (255, 255, 255))
+            kills_font = kills_font.render(str(self.entries[i]["kills"]), True,
+                                           (255, 255, 255))
             self.win.blit(kills_font, (625, y+15))
 
             y += 65

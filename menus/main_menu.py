@@ -6,7 +6,6 @@ from menus.buttons.button import Button
 from menus.leaderboard import Leaderboard
 from menus.howto import Howto
 
-
 class MainMenu(Menu):
 
     def __init__(self):

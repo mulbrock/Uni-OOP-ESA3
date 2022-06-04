@@ -1,7 +1,5 @@
-import pygame
 import math
 from entities.entity import Entity
-
 
 class Projectile(Entity):
 
@@ -23,7 +21,8 @@ class Projectile(Entity):
 
         dir_vector = ((x2 - x1) * 2, (y2 - y1) * 2)
         dir_vector_length = math.sqrt((dir_vector[0]) ** 2 + (dir_vector[1]) ** 2)
-        dir_vector = (dir_vector[0] / dir_vector_length, dir_vector[1] / dir_vector_length)
+        dir_vector = (dir_vector[0] / dir_vector_length, dir_vector[1] /
+                      dir_vector_length)
 
         step = ((x1 + dir_vector[0]), (y1 + dir_vector[1]))
 

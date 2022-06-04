@@ -1,6 +1,4 @@
-import pygame
 from entities.enemies.enemy import Enemy
-
 
 class EnemyOne(Enemy):
 

@@ -2,7 +2,6 @@ import pygame
 import time
 from entities.towers.tower import Tower
 
-
 class LaserTower(Tower):
 
     cost = 4
@@ -28,7 +27,6 @@ class LaserTower(Tower):
         if self.aimed_enemy is not None:
             enemy_pos = self.aimed_enemy.get_center()
             beam_origin_pos = self.get_center()
-            # pygame.draw.line(win, (0, 255, 255), beam_origin_pos, enemy_pos, (2))
 
             if self.attack_power_level == 1:
                 pygame.draw.line(win, (0, 255, 0), beam_origin_pos, enemy_pos, 1)

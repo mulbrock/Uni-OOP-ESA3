@@ -1,7 +1,5 @@
 import pygame.image
-
 from entities.towers.tower import Tower
-
 
 class BuildingArea:
 
@@ -17,7 +15,8 @@ class BuildingArea:
             "C": _c,
             "D": _d
         }
-        self.image = pygame.image.load("assets/img/map/building_area_{}.png".format(area_number)).convert_alpha()
+        self.image = pygame.image.load("assets/img/map/building_area_{}.png".
+                                       format(area_number)).convert_alpha()
         self.buildings = list()
 
     def is_point_in_building_area(self, pos):
@@ -28,7 +27,8 @@ class BuildingArea:
         x1, y1 = area["A"]
         x2, y2 = area["C"]
 
-        if self.is_point_in_building_area((x1, y1)) and self.is_point_in_building_area((x2, y2)):
+        if self.is_point_in_building_area((x1, y1)) and \
+                self.is_point_in_building_area((x2, y2)):
             return True
         return False
 

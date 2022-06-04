@@ -1,9 +1,6 @@
 import pygame
-from pygame.locals import *
-
 from menus.menu import Menu
 from menus.buttons.button import Button
-
 
 class IngameMenu(Menu):
 

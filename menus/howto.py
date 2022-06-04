@@ -20,7 +20,8 @@ class Howto(Menu):
         self.howto_shown = True
         while self.howto_shown:
             self.win.blit(self.background, self.draw_pos)
-            self.win.blit(self.back_button.get_symbol(), self.back_button.get_draw_pos())
+            self.win.blit(self.back_button.get_symbol(),
+                          self.back_button.get_draw_pos())
 
             m_pos = pygame.mouse.get_pos()
 

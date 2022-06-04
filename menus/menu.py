@@ -1,6 +1,5 @@
 import pygame
 
-
 class Menu:
 
     def __init__(self, draw_pos, bg: pygame.image):
@@ -15,7 +14,8 @@ class Menu:
         button_image = button.get_symbol()
         x = (self.background.get_width()/2) - button_image.get_width()/2
         y = (self.background.get_height()/2) - button_image.get_height()/2
-        y = y + (self.vertical_padding * list_len) + (button_image.get_height() * list_len)
+        y = y + (self.vertical_padding * list_len) + (button_image.get_height() *
+                                                      list_len)
         return x, y
 
     def get_vertical_padding(self):

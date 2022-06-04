@@ -4,10 +4,11 @@ import math
 import re
 from entities.entity import Entity
 
-
+#########################################################################################
 class Tower(Entity):
 
-    def __init__(self, _pos: tuple, _symbol_path, _range, _cool_down, _attack_power, _cost):
+    def __init__(self, _pos: tuple, _symbol_path, _range, _cool_down, _attack_power,
+                 _cost):
         super().__init__(_pos, _symbol_path)
 
         self.build_cost = _cost
@@ -51,12 +52,6 @@ class Tower(Entity):
                 return
         self.active = False
         self.aimed_enemy = None
-
-    def draw_attack(self, win):
-        raise NotImplementedError
-
-    def attack(self):
-        raise NotImplementedError
 
     def upgrade_range(self):
         if self.range_level < 10:

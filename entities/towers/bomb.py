@@ -1,9 +1,6 @@
-import pygame
 import time
-import math
 from entities.towers.tower import Tower
 from entities.towers.projectile import Projectile
-
 
 class BombTower(Tower):
 
@@ -27,7 +24,8 @@ class BombTower(Tower):
                 self.timer = time.time()
                 self.position_to_attack = self.aimed_enemy.get_center()
 
-                projectile = Projectile(self.center, self.position_to_attack, self.attack_power, self.attack_power_level)
+                projectile = Projectile(self.center, self.position_to_attack,
+                                        self.attack_power, self.attack_power_level)
                 self.projectiles.append(projectile)
                 return True
         return False
