@@ -13,12 +13,14 @@ class MainMenu(Menu):
         pygame.display.set_caption("Tower Defense")
 
         self.win = pygame.display.set_mode((1024, 768))
-        background = pygame.image.load("assets/img/menu/main_menu.png").convert_alpha()
+        background = pygame.image.load("assets/img/menu/main_menu.png").\
+            convert_alpha()
 
         draw_pos = (0, 0)
 
         self.buttons = [Button('mbtn_new_game', draw_pos=(50, 220)),
-                        Button('mbtn_continue', draw_pos=(537, 220), inactive=True),
+                        Button('mbtn_continue', draw_pos=(537, 220),
+                               inactive=True),
                         Button('mbtn_tutorial', draw_pos=(50, 390)),
                         Button('mbtn_ranking', draw_pos=(537, 390)),
                         Button('mbtn_quit', draw_pos=(537, 560))]
