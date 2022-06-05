@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from menus.buttons.button import Button
 from menus.buttons.char_button import CharButton
-###############################################################################
+
 class GameOver:
 
     def __init__(self, win, main_menu, bg, score):
@@ -13,10 +13,13 @@ class GameOver:
         self.game_over_shown = True
 
         self.background = bg
-        self.overlay = self.game_over_overlay = pygame.image.load("assets/img/game_over.png").convert_alpha()
+        self.overlay = self.game_over_overlay = pygame.image.load\
+            ("assets/img/game_over.png").convert_alpha()
 
-        self.backspace_button = Button('ebtn_backspace', draw_pos=(837, 350))
-        self.enter_button = Button('ebtn_enter', draw_pos=(767, 560), inactive=True)
+        self.backspace_button = Button('ebtn_backspace',
+                                       draw_pos=(837, 350))
+        self.enter_button = Button('ebtn_enter', draw_pos=(767, 560),
+                                   inactive=True)
 
         self.char_buttons = [
             CharButton('1', 'ebtn_1', draw_pos=(137, 350)),
@@ -64,13 +67,18 @@ class GameOver:
             self.win.blit(self.background, (0, 0))
             self.win.blit(self.game_over_overlay, (0, 0))
 
-            self.win.blit(self.backspace_button.get_symbol(), self.backspace_button.get_draw_pos())
-            self.win.blit(self.enter_button.get_symbol(), self.enter_button.get_draw_pos())
+            self.win.blit(self.backspace_button.get_symbol(),
+                          self.backspace_button.get_draw_pos())
+            self.win.blit(self.enter_button.get_symbol(),
+                          self.enter_button.get_draw_pos())
             for char_button in self.char_buttons:
-                self.win.blit(char_button.get_symbol(), char_button.get_draw_pos())
+                self.win.blit(char_button.get_symbol(),
+                              char_button.get_draw_pos())
 
-            player_name_font = pygame.font.Font("assets/orbitron-black.otf", 40)
-            player_name_font = player_name_font.render(self.player_name, True, (0, 0, 0))
+            player_name_font = pygame.font.Font("assets/orbitron-black.otf",
+                                                40)
+            player_name_font = player_name_font.render(self.player_name,
+                                                       True, (0, 0, 0))
             self.win.blit(player_name_font, (430, 677))
 
             m_pos = pygame.mouse.get_pos()
@@ -92,15 +100,18 @@ class GameOver:
                                     char_button.button_down()
                                     break
                 if event.type == MOUSEBUTTONUP:
-                    if self.backspace_button.click_check(m_pos) and self.backspace_button.pressed:
+                    if self.backspace_button.click_check(m_pos) and \
+                            self.backspace_button.pressed:
                         self.backspace_button.button_up()
                         self.delete_char()
-                    elif self.enter_button.click_check(m_pos) and self.enter_button.pressed:
+                    elif self.enter_button.click_check(m_pos) and \
+                            self.enter_button.pressed:
                         self.enter()
                         self.main_menu.show_menu()
                     else:
                         for char_button in self.char_buttons:
-                            if char_button.click_check(m_pos) and char_button.pressed:
+                            if char_button.click_check(m_pos) and \
+                                    char_button.pressed:
                                 self.add_char(char_button.get_char())
                                 char_button.button_up()
                                 break
@@ -130,5 +141,6 @@ class GameOver:
             self.enter_button.deactivate()
 
     def enter(self):
-        self.main_menu.leaderboard.update_leaderboard(self.player_name, self.score)
+        self.main_menu.leaderboard.update_leaderboard(self.player_name,
+                                                      self.score)
         self.main_menu.game_over()
