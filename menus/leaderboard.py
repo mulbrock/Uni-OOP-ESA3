@@ -61,8 +61,8 @@ class Leaderboard(Menu):
 
             y += 65
 
-    def update_leaderboard(self, new_score):
-        self.entries.append({"name": "XYZ", "kills": new_score})
+    def update_leaderboard(self, name, new_score):
+        self.entries.append({"name": name, "kills": new_score})
 
         self.entries = sorted(self.entries, key=lambda d: d["kills"], reverse=True)
 

@@ -8,6 +8,7 @@ from entities.enemies.enemy_three import EnemyThree
 from entities.towers.laser import LaserTower
 from entities.towers.bomb import BombTower
 from menus.ingame_menu import IngameMenu
+from game_over import GameOver
 
 class Game:
 
@@ -52,14 +53,9 @@ class Game:
         # Ingame Menu
         self.ingame_menu = IngameMenu()
 
-        # Game Over
-        self.game_over = False
-        self.game_over_overlay = pygame.image.load("assets/img/game_over.png").\
-            convert_alpha()
-
         # Stats
         self.money = 20
-        self.lives = 20
+        self.lives = 1
         self.wave = 1
         self.kills = 0
         self.enemies = 0
@@ -83,7 +79,7 @@ class Game:
         clock = pygame.time.Clock()
 
         # Loop
-        while self.keep_going and not self.game_over:
+        while self.keep_going:
 
             if self.pause:
                 self.main_menu.show_menu()
@@ -94,8 +90,7 @@ class Game:
 
                 # Game Over
                 if self.lives == 0:
-                    self.game_over = True
-                    self.main_menu.set_score(self.kills)
+                    self.game_over()
 
                 # Enemies: Spawn and Creation
                 if time.time() - self.timer >= self.spawn_cool_down and \
@@ -276,25 +271,6 @@ class Game:
                 self.all_enemies_killed = False
 
             # Redisplay
-            pygame.display.update()
-
-        while self.keep_going and self.game_over:
-            self.win.blit(bg, (0, 0))
-            self.win.blit(self.game_over_overlay, (0, 0))
-
-            self.main_menu.game_over()
-
-            # m_pos = pygame.mouse.get_pos()
-
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    self.keep_going = False
-                    self.main_menu.end_game()
-
-                elif event.type == MOUSEBUTTONUP:
-                    self.keep_going = False
-                    self.main_menu.show_menu()
-
             pygame.display.update()
 
     # Drawing
@@ -602,3 +578,8 @@ class Game:
     def end_game(self):
         self.pause = False
         self.keep_going = False
+
+    def game_over(self):
+        go = GameOver(self.win, self.main_menu, self.game_map.get_bg(), self.kills)
+        self.keep_going = False
+        go.show_game_over()
