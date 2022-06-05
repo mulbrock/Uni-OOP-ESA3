@@ -131,3 +131,4 @@ class GameOver:
 
     def enter(self):
         self.main_menu.leaderboard.update_leaderboard(self.player_name, self.score)
+        self.main_menu.game_over()
