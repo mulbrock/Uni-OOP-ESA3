@@ -54,7 +54,7 @@ class Game:
         self.ingame_menu = IngameMenu()
 
         # Stats
-        self.money = 20
+        self.money = 20000
         self.lives = 20
         self.wave = 1
         self.kills = 0
@@ -63,6 +63,10 @@ class Game:
         # Run Game
         self.keep_going = True
         self.pause = False
+
+        # Set Back Build Costs
+        LaserTower.cost = 4
+        BombTower.cost = 10
 
     def start(self):
 
@@ -352,15 +356,19 @@ class Game:
             laser_print_color = (255, 0, 0)
             bomb_print_color = (255, 0, 0)
 
-        laser_cost_font = pygame.font.Font("assets/orbitron-black.otf", 24)
+        laser_cost_font = pygame.font.Font("assets/orbitron-black.otf", 20)
         laser_cost_font = laser_cost_font.render(str(LaserTower.cost), True,
                                                  laser_print_color)
-        self.win.blit(laser_cost_font, (277, 670))
+        laser_cost_rect = laser_cost_font.get_rect()
+        self.win.blit(laser_cost_font, (283 - laser_cost_rect.center[0],
+                                        678 - laser_cost_rect.center[1] / 2))
 
-        bomb_cost_font = pygame.font.Font("assets/orbitron-black.otf", 24)
+        bomb_cost_font = pygame.font.Font("assets/orbitron-black.otf", 20)
         bomb_cost_font = bomb_cost_font.render(str(BombTower.cost), True,
                                                bomb_print_color)
-        self.win.blit(bomb_cost_font, (566, 670))
+        bomb_cost_rect = bomb_cost_font.get_rect()
+        self.win.blit(bomb_cost_font, (578 - bomb_cost_rect.center[0],
+                                       678 - bomb_cost_rect.center[1] / 2))
 
     def print_upgrade_cost(self):
         if self.selected_tower.get_speed_level() < 10:
@@ -369,11 +377,13 @@ class Game:
             else:
                 speed_print_color = (255, 0, 0)
 
-            speed_cost_font = pygame.font.Font("assets/orbitron-black.otf", 24)
+            speed_cost_font = pygame.font.Font("assets/orbitron-black.otf", 20)
             speed_cost_font = speed_cost_font.render(
                 str(self.selected_tower.get_upgrade_speed_cost()), True,
                 speed_print_color)
-            self.win.blit(speed_cost_font, (566, 670))
+            speed_cost_rect = speed_cost_font.get_rect()
+            self.win.blit(speed_cost_font, (578 - speed_cost_rect.center[0],
+                                            678 - speed_cost_rect.center[1] / 2))
 
         if self.selected_tower.get_range_level() < 10:
             if self.money >= self.selected_tower.get_upgrade_range_cost():
@@ -381,11 +391,13 @@ class Game:
             else:
                 range_print_color = (255, 0, 0)
 
-            range_cost_font = pygame.font.Font("assets/orbitron-black.otf", 24)
+            range_cost_font = pygame.font.Font("assets/orbitron-black.otf", 20)
             range_cost_font = range_cost_font.render(
                 str(self.selected_tower.get_upgrade_range_cost()), True,
                 range_print_color)
-            self.win.blit(range_cost_font, (270, 670))
+            range_cost_rect = range_cost_font.get_rect()
+            self.win.blit(range_cost_font, (283 - range_cost_rect.center[0],
+                                            678 - range_cost_rect.center[1] / 2))
 
         if self.selected_tower.get_power_level() < 10:
             if self.money >= self.selected_tower.get_upgrade_power_cost():
@@ -393,27 +405,35 @@ class Game:
             else:
                 power_print_color = (255, 0, 0)
 
-            power_cost_font = pygame.font.Font("assets/orbitron-black.otf", 24)
+            power_cost_font = pygame.font.Font("assets/orbitron-black.otf", 20)
             power_cost_font = power_cost_font.render(
                 str(self.selected_tower.get_upgrade_power_cost()), True,
                 power_print_color)
-            self.win.blit(power_cost_font, (861, 670))
+            power_cost_rect = power_cost_font.get_rect()
+            self.win.blit(power_cost_font, (873 - power_cost_rect.center[0],
+                                            678 - power_cost_rect.center[1] / 2))
 
     def print_tower_levels(self):
-        range_level_font = pygame.font.Font("assets/orbitron-black.otf", 24)
+        range_level_font = pygame.font.Font("assets/orbitron-black.otf", 20)
         range_level_font = range_level_font.render(
             str(self.selected_tower.get_range_level()), True, (255, 255, 255))
-        self.win.blit(range_level_font, (270, 585))
+        range_level_rect = range_level_font.get_rect()
+        self.win.blit(range_level_font, (283 - range_level_rect.center[0],
+                                         593 - range_level_rect.center[1] / 2))
 
-        speed_level_font = pygame.font.Font("assets/orbitron-black.otf", 24)
+        speed_level_font = pygame.font.Font("assets/orbitron-black.otf", 20)
         speed_level_font = speed_level_font.render(
             str(self.selected_tower.get_speed_level()), True, (255, 255, 255))
-        self.win.blit(speed_level_font, (566, 585))
+        speed_level_rect = speed_level_font.get_rect()
+        self.win.blit(speed_level_font, (579 - speed_level_rect.center[0],
+                                         593 - speed_level_rect.center[1] / 2))
 
-        power_level_font = pygame.font.Font("assets/orbitron-black.otf", 24)
+        power_level_font = pygame.font.Font("assets/orbitron-black.otf", 20)
         power_level_font = power_level_font.render(
             str(self.selected_tower.get_power_level()), True, (255, 255, 255))
-        self.win.blit(power_level_font, (861, 585))
+        power_level_rect = power_level_font.get_rect()
+        self.win.blit(power_level_font, (873 - power_level_rect.center[0],
+                                         593 - power_level_rect.center[1] / 2))
 
     # Updating
     def update_stats(self):
