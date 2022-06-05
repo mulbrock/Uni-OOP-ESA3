@@ -79,7 +79,10 @@ class GameOver:
                                                 40)
             player_name_font = player_name_font.render(self.player_name,
                                                        True, (0, 0, 0))
-            self.win.blit(player_name_font, (430, 677))
+            player_name_rect = player_name_font.get_rect()
+            self.win.blit(player_name_font,
+                          (512 - player_name_rect.center[0],
+                           686 - player_name_rect.center[1] / 2))
 
             m_pos = pygame.mouse.get_pos()
 

@@ -54,7 +54,7 @@ class Game:
         self.ingame_menu = IngameMenu()
 
         # Stats
-        self.money = 20000
+        self.money = 20
         self.lives = 20
         self.wave = 1
         self.kills = 0
