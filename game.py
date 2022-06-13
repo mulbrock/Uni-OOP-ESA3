@@ -464,7 +464,7 @@ class Game:
                 self.game_map.add_enemy(enemy)
 
     def generate_enemies(self):
-        self.amount = int(9 + math.pow(self.wave, 2))
+        self.amount = 9 + int(2 * math.pow(self.wave, 2))
 
         # 10 Enemies
         if self.wave == 1:
