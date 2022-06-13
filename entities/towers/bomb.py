@@ -1,3 +1,4 @@
+import math
 import time
 from entities.towers.tower import Tower
 from entities.towers.projectile import Projectile
@@ -45,7 +46,7 @@ class BombTower(Tower):
 
     def upgrade_speed(self):
         if self.speed_level < 10:
-            self.speed_upgrade_cost += self.speed_level
+            self.speed_upgrade_cost += 7 * self.fibonacci(self.speed_level)
             self.cool_down_time -= 0.15
             self.speed_level += 1
             return True

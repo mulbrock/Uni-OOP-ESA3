@@ -89,7 +89,7 @@ class Game:
                 self.main_menu.show_menu()
             else:
                 # Timer
-                clock.tick(60)
+                clock.tick(90)
                 self.win.blit(bg, (0, 0))
 
                 # Game Over
