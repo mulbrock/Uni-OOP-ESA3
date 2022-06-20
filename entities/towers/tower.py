@@ -55,7 +55,7 @@ class Tower(Entity):
 
     def upgrade_range(self):
         if self.range_level < 10:
-            self.range_upgrade_cost += 7 * self.fibonacci(self.range_level)
+            self.range_upgrade_cost += 4 * self.fibonacci(self.range_level)
             self.range += 5
             self.range_level += 1
             return True
@@ -66,7 +66,7 @@ class Tower(Entity):
 
     def upgrade_power(self):
         if self.attack_power_level < 10:
-            self.attack_power_upgrade_cost += 7 * self.fibonacci(self.attack_power_level)
+            self.attack_power_upgrade_cost += 4 * self.fibonacci(self.attack_power_level)
             self.attack_power += 1
             self.attack_power_level += 1
             self.update_symbol()

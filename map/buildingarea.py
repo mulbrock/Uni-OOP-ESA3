@@ -1,6 +1,7 @@
 import pygame.image
 from entities.towers.tower import Tower
 
+
 class BuildingArea:
 
     def __init__(self, area_number, _a, _b, _c, _d):
