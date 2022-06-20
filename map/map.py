@@ -1,5 +1,6 @@
 import pygame
-from utils.buildingarea import BuildingArea
+from map.buildingarea import BuildingArea
+
 
 class Map:
 
