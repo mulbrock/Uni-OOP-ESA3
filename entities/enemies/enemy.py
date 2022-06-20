@@ -2,8 +2,9 @@ import math
 import pygame
 from entities.entity import Entity
 
-
 """"""
+
+
 class Enemy(Entity):
 
     def __init__(self, _path, _hp, _symbol, _level):
@@ -11,13 +12,13 @@ class Enemy(Entity):
 
         self.max_hp = _hp
         self.hp = _hp
-        self.kill_reward = int(_level * 2)
+        self.kill_reward = int(_level)
 
         self.path = _path
         self.path_stage = 0
         self.step_count = 0
 
-        self.last_stage = len(self.path)-1
+        self.last_stage = len(self.path) - 1
 
     def move_forward(self):
         x1, y1 = self.get_center()
@@ -63,7 +64,7 @@ class Enemy(Entity):
                           self.get_draw_pos()[1] - 25, 40, 5), 0)
         pygame.draw.rect(win, (0, 255, 0),
                          (self.get_draw_pos()[0] - 10,
-                          self.get_draw_pos()[1] - 25, 40*life_ratio, 5), 0)
+                          self.get_draw_pos()[1] - 25, 40 * life_ratio, 5), 0)
 
     def lose_life(self, amount):
         self.hp -= amount
