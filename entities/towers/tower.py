@@ -6,6 +6,9 @@ from entities.entity import Entity
 
 
 class Tower(Entity):
+    """
+    Allgmeine Turm Klasse. Hat keine Instanzen.
+    """
 
     def __init__(self, _pos: tuple, _symbol_path, _range, _cool_down, _attack_power,
                  _cost):
@@ -146,7 +149,7 @@ class Tower(Entity):
     def fibonacci(self, num):
         """
         Errechnet eine Fibonacci-Folge.
-        :param num:
+        :param num: int
         :return:
         """
         arr = [0, 1]
