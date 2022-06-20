@@ -33,12 +33,20 @@ class Leaderboard(Menu):
         super().__init__(draw_pos, background)
 
     def get_lowest(self):
+        """
+        Ermittelt den niedrigsten Eintrag in der Bestenliste.
+        :return:
+        """
         if len(self.entries) < 10:
             return 0
         else:
             return self.entries[9]["kills"]
 
     def get_data(self):
+        """
+        Lädt die Bestenliste aus einem JSON File.
+        :return:
+        """
         self.entries.clear()
         with open("assets/leaderboard_data.json", "r") as json_file:
             data = json.load(json_file)
@@ -46,6 +54,10 @@ class Leaderboard(Menu):
                 self.entries.append(entry)
 
     def draw_scores(self):
+        """
+        Stellt die Einträge in der Bestenliste dar.
+        :return:
+        """
         y = 102
         for i in range(0, len(self.entries)):
             self.win.blit(self.entry_images[i], (50, y))
@@ -62,6 +74,13 @@ class Leaderboard(Menu):
             y += 65
 
     def update_leaderboard(self, name, new_score):
+        """
+        Fügt neuen Eintrag hinzu, sortiert die Liste und entfernt den niedrigsten Eintrag.
+        Speichert die Bestenliste und lädt sie neu aus dem File.
+        :param name:
+        :param new_score:
+        :return:
+        """
         self.entries.append({"name": name, "kills": new_score})
 
         self.entries = sorted(self.entries, key=lambda d: d["kills"], reverse=True)
@@ -81,6 +100,10 @@ class Leaderboard(Menu):
         self.get_data()
 
     def show_leaderboard(self):
+        """
+        Stellt die Bestenliste dar und reagiert auf Events.
+        :return:
+        """
         self.leaderboard_shown = True
         while self.leaderboard_shown:
             self.win.blit(self.background, self.draw_pos)

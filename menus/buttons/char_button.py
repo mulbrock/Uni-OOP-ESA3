@@ -7,4 +7,8 @@ class CharButton(Button):
         super().__init__(button_name, draw_pos, inactive)
 
     def get_char(self):
+        """
+        Gibt das gespeicherte Schriftzeichen zurück.
+        :return: self.char
+        """
         return self.char

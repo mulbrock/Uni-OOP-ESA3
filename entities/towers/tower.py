@@ -4,7 +4,7 @@ import math
 import re
 from entities.entity import Entity
 
-#########################################################################################
+
 class Tower(Entity):
 
     def __init__(self, _pos: tuple, _symbol_path, _range, _cool_down, _attack_power,

@@ -17,6 +17,10 @@ class Howto(Menu):
         super().__init__(draw_pos, background)
 
     def show_howto(self):
+        """
+        Stellt die Spielanleitung dar und reagiert auf Events.
+        :return:
+        """
         self.howto_shown = True
         while self.howto_shown:
             self.win.blit(self.background, self.draw_pos)

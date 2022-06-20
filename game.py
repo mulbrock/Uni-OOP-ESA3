@@ -70,9 +70,10 @@ class Game:
         BombTower.cost = 10
 
     def start(self):
-
-        # Display config
-
+        """
+        Startet die Game-Loop, verwaltet alle In-Game-Methoden und das Game-Menu und reagiert auf Events.
+        :return:
+        """
         # Entities
         bg = self.game_map.get_bg()
         self.generate_enemies()
@@ -250,11 +251,11 @@ class Game:
 
                 self.draw_ingame_menu()
                 self.show_selected_tower()
-                self.handle_tower_attack()
+                self.handle_laser_impacts()
                 self.handle_bomb_impacts()
                 self.draw_entities(self.win)
                 self.print_stats()
-                self.update_stats()
+                self.update_enemy_stat()
 
                 if self.destroy_mode:
                     self.draw_destroy_symbol(self.win, m_pos)
@@ -278,10 +279,20 @@ class Game:
 
     # Drawing
     def draw_entities(self, win):
+        """
+        Initialisiert die Darstellung aller Entities.
+        :param win:
+        :return:
+        """
         self.draw_enemies(win)
         self.draw_towers(win)
 
     def draw_enemies(self, win):
+        """
+        Stellt alle Gegner dar und entfernt sie, wenn sie keine HP mehr haben.
+        :param win:
+        :return:
+        """
         for enemy in self.game_map.get_enemies():
             if enemy.get_life() <= 0:
                 self.game_map.remove_enemy(enemy)
@@ -294,6 +305,12 @@ class Game:
                 self.lives -= 1
 
     def draw_tower_to_build(self, win, m_pos):
+        """
+        Stellt den Turm am Cursor dar, der gebaut werden soll.
+        :param win:
+        :param m_pos:
+        :return:
+        """
         x, y = m_pos
         if type(self.tower_to_build) == LaserTower:
             x -= 10
@@ -304,26 +321,53 @@ class Game:
         win.blit(self.tower_to_build.get_symbol(), (x, y))
 
     def draw_destroy_symbol(self, win, m_pos):
+        """
+        Stellt das Zerstören-Symbol am Cursor dar.
+        :param win:
+        :param m_pos:
+        :return:
+        """
         x, y = m_pos
         x -= 12
         y -= 12
         win.blit(self.destroy_symbol, (x, y))
 
     def draw_towers(self, win):
+        """
+        Stellt alle gebauten Türme dar.
+        :param win:
+        :return:
+        """
         for tower in self.game_map.get_all_towers():
             win.blit(tower.get_symbol(), tower.get_draw_pos())
 
     def show_selected_tower(self):
+        """
+        Stellt die Schussweite des ausgewählten Turms als Kreis dar.
+        :return:
+        """
         if self.selected_tower is not None:
             self.selected_tower.draw_range(self.win)
 
     def draw_ingame_menu(self):
+        """
+        Stellt das Ingame-Menü dar.
+        :return:
+        """
         self.win.blit(self.ingame_menu.get_symbol(), self.ingame_menu.get_draw_pos())
         for button in self.ingame_menu.get_buttons():
             self.win.blit(button.get_symbol(), button.get_draw_pos())
 
     # Printing Stats and Costs
     def print_stats(self):
+        """
+        Stellt die verbleibenden Leben,
+        verfügbare Coins,
+        erzielte Kills,
+        Anzahl der Feinde
+        und die aktuelle Welle dar.
+        :return:
+        """
         lives_font = pygame.font.Font("assets/orbitron-black.otf", 28)
         lives_font = lives_font.render(str(self.lives), True, (255, 255, 255))
         self.win.blit(lives_font, (75, 726))
@@ -345,6 +389,10 @@ class Game:
         self.win.blit(wave_font, (775, 726))
 
     def print_building_cost(self):
+        """
+        Stellt die für den Bau eines neuen Turms notwendigen Kosten dar.
+        :return:
+        """
         if self.money >= BombTower.cost:
             laser_print_color = (255, 255, 255)
             bomb_print_color = (255, 255, 255)
@@ -370,6 +418,10 @@ class Game:
                                        678 - bomb_cost_rect.center[1] / 2))
 
     def print_upgrade_cost(self):
+        """
+        Stellt die für ein Upgrade des ausgewählten Turms nötigen Kosten dar.
+        :return:
+        """
         if self.selected_tower.get_speed_level() < 10:
             if self.money >= self.selected_tower.get_upgrade_speed_cost():
                 speed_print_color = (255, 255, 255)
@@ -413,6 +465,10 @@ class Game:
                                             678 - power_cost_rect.center[1] / 2))
 
     def print_tower_levels(self):
+        """
+        Stellt die aktuellen Level des ausgewählten Turms dar.
+        :return:
+        """
         range_level_font = pygame.font.Font("assets/orbitron-black.otf", 20)
         range_level_font = range_level_font.render(
             str(self.selected_tower.get_range_level()), True, (255, 255, 255))
@@ -435,11 +491,19 @@ class Game:
                                          593 - power_level_rect.center[1] / 2))
 
     # Updating
-    def update_stats(self):
+    def update_enemy_stat(self):
+        """
+        Aktualisiert die Anzahl aktiver Feinde.
+        :return:
+        """
         self.enemies = len(self.game_map.get_enemies())
 
     # Handling
-    def handle_tower_attack(self):
+    def handle_laser_impacts(self):
+        """
+        Verwaltet den Angriffsschaden durch Laser.
+        :return:
+        """
         for tower in self.game_map.get_all_towers():
             tower.set_aimed_enemy(self.game_map.get_enemies())
             if tower.__class__ == BombTower:
@@ -450,18 +514,20 @@ class Game:
                 tower.draw_attack(self.win)
 
     def handle_bomb_impacts(self):
+        """
+        Verwaltet den Angriffsschaden durch Bomben.
+        :return:
+        """
         for projectile in self.impacted_projectiles:
             projectile.handle_impact(self.game_map.get_enemies())
         self.impacted_projectiles = list()
 
     # Creating Enemies
-    def spawn_enemies(self):
-        if len(self.enemies_to_enter) > 0:
-            enemy = self.enemies_to_enter.pop()
-            if enemy:
-                self.game_map.add_enemy(enemy)
-
     def generate_enemies(self):
+        """
+        Erzeugt neue Feinde.
+        :return:
+        """
         self.amount = 9 + int(math.pow(self.wave, 2)/2)
 
         if self.wave == 1:
@@ -572,20 +638,47 @@ class Game:
                 enemy.increase_max_hp_by(self.wave * 4)
                 self.enemies_to_enter.append(enemy)
 
+    def spawn_enemies(self):
+        """
+        Gibt erzeugte Feinde nacheinander auf die Map.
+        :return:
+        """
+        if len(self.enemies_to_enter) > 0:
+            enemy = self.enemies_to_enter.pop()
+            if enemy:
+                self.game_map.add_enemy(enemy)
+
     # Removing
     def remove_tower(self, tower):
+        """
+        Entfernt ausgewählten Turm und schreibt dem Spielerkonto Coins gut.
+        :param tower:
+        :return:
+        """
         self.money += tower.redeem_coins()
         self.game_map.remove_tower(tower)
 
     # General Functions
     def resume_game(self):
+        """
+        Setzt das aktuelle Spiel fort.
+        :return:
+        """
         self.pause = False
 
     def end_game(self):
+        """
+        Beendet das aktuelle Spiel.
+        :return:
+        """
         self.pause = False
         self.keep_going = False
 
     def game_over(self):
+        """
+        Beendet das aktuelle Spiel und ruft den Game-Over-Bildschirm auf.
+        :return:
+        """
         go = GameOver(self.win, self.main_menu, self.game_map.get_bg(), self.kills)
         self.keep_going = False
         go.show_game_over()

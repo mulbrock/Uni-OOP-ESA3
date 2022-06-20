@@ -14,17 +14,12 @@ class IngameMenu(Menu):
                         Button('btn_pause', draw_pos=(917, 576))]
         self.upgrade_mode = False
 
-    def click_check(self, pos):
-        x, y = pos
-
-        x1, y1 = self.draw_pos
-        x2, y2 = x1 + (self.size[0]), y1 + (self.size[1])
-
-        if x1 <= x <= x2:
-            if y1 <= y <= y2:
-                return True
-
     def left_btn_check(self, pos):
+        """
+        Vergleicht die übergene Position mit der Position des linken Ingame-Menu Buttons.
+        :param pos:
+        :return:
+        """
         x, y = pos
 
         x1 = 32
@@ -37,6 +32,11 @@ class IngameMenu(Menu):
             return True
 
     def middle_btn_check(self, pos):
+        """
+        Vergleicht die übergene Position mit der Position des mittleren Ingame-Menu Buttons.
+        :param pos:
+        :return:
+        """
         x, y = pos
 
         x1 = 327
@@ -49,6 +49,11 @@ class IngameMenu(Menu):
             return True
 
     def right_btn_check(self, pos):
+        """
+        Vergleicht die übergene Position mit der Position des rechten Ingame-Menu Buttons.
+        :param pos:
+        :return:
+        """
         x, y = pos
 
         x1 = 622
@@ -61,6 +66,11 @@ class IngameMenu(Menu):
             return True
 
     def pause_check(self, pos):
+        """
+        Vergleicht die übergene Position mit der Position des Pause-Menu Buttons.
+        :param pos:
+        :return:
+        """
         x, y = pos
 
         x1 = 917
@@ -73,18 +83,24 @@ class IngameMenu(Menu):
             return True
 
     def get_symbol(self):
+        """
+        Gibt die Ingame-Menu Grafik zurück.
+        :return:
+        """
         return self.background
 
-    def get_height(self):
-        return self.size[1]
-
-    def get_width(self):
-        return self.size[0]
-
     def get_buttons(self):
+        """
+        Gibt die Buttons des Ingame-Menu zurück.
+        :return: self.buttons
+        """
         return self.buttons
 
     def switch_to_upgrade_view(self):
+        """
+        Wechselt von der Bau-Ansicht zur Upgrade-Ansicht des ausgewählten Turms.
+        :return:
+        """
         self.upgrade_mode = True
         self.buttons.clear()
         self.buttons = [Button('btn_range', draw_pos=(32, 576)),
@@ -93,6 +109,10 @@ class IngameMenu(Menu):
                         Button('btn_pause', draw_pos=(917, 576))]
 
     def switch_to_build_view(self):
+        """
+        Wechselt von der Upgrade-Ansicht zur Bau-Ansicht.
+        :return:
+        """
         self.upgrade_mode = False
         self.buttons.clear()
         self.buttons = [Button('btn_laserbuild', draw_pos=(32, 576)),

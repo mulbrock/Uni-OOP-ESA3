@@ -15,39 +15,50 @@ class Button:
         self.pressed = False
         self.inactive = inactive
         if self.inactive:
-            self.display_inactive()
-
-    def display_inactive(self):
-        self.symbol = pygame.image.load("assets/img/buttons/{}_inactive.png".
-                                        format(self.button_name)).convert_alpha()
+            self.deactivate()
 
     def activate(self):
+        """
+        Aktiviert den Button und stellt ihn normal dar.
+        :return:
+        """
         self.inactive = False
         self.symbol = pygame.image.load("assets/img/buttons/{}.png".
                                         format(self.button_name)).convert_alpha()
 
     def deactivate(self):
+        """Deaktiviert den Button und stellt ihn ausgegraut dar."""
         self.inactive = True
         self.symbol = pygame.image.load("assets/img/buttons/{}_inactive.png".
                                         format(self.button_name)).convert_alpha()
 
     def get_button_name(self):
+        """
+        Gibt den Namen des Buttons zurück.
+        :return: self.button_name
+        """
         return self.button_name
 
     def get_symbol(self):
+        """
+        Gibt die Grafik des Buttons zurück.
+        :return: self.symbol
+        """
         return self.symbol
 
-    def set_symbol(self, button_name):
-        self.symbol = pygame.image.load("assets/img/buttons/{}_pressed.png".
-                                        format(button_name)).convert_alpha()
-
     def get_draw_pos(self):
+        """
+        Gibt die Zeichenposition des Buttons zurück.
+        :return: self.draw_pos
+        """
         return self.draw_pos
 
-    def set_draw_pos(self, pos):
-        self.draw_pos = pos
-
     def click_check(self, pos):
+        """
+        Vergleicht die übergebene Position mit der eigenen Area.
+        :param pos:
+        :return:
+        """
         x, y = pos
 
         x1, y1 = self.draw_pos
@@ -57,15 +68,17 @@ class Button:
             if y1 <= y <= y2:
                 return True
 
-    def get_height(self):
-        return self.size[1]
-
     def button_down(self):
+        """Stellt den Button als gedrückt dar."""
         if not self.inactive:
             self.symbol = self.pressed_symbol
             self.pressed = True
 
     def button_up(self):
+        """
+        Stellt den Button als ungedrückt dar.
+        :return:
+        """
         if not self.inactive:
             self.symbol = self.unpressed_symbol
             self.pressed = False

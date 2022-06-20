@@ -63,26 +63,16 @@ class GameOver:
         self.player_name = ""
 
     def show_game_over(self):
+        """
+        Stellt den Game Over Bereich dar und reagiert auf Events.
+        :return:
+        """
         while self.game_over_shown:
             self.win.blit(self.background, (0, 0))
             self.win.blit(self.game_over_overlay, (0, 0))
 
-            self.win.blit(self.backspace_button.get_symbol(),
-                          self.backspace_button.get_draw_pos())
-            self.win.blit(self.enter_button.get_symbol(),
-                          self.enter_button.get_draw_pos())
-            for char_button in self.char_buttons:
-                self.win.blit(char_button.get_symbol(),
-                              char_button.get_draw_pos())
-
-            player_name_font = pygame.font.Font("assets/orbitron-black.otf",
-                                                40)
-            player_name_font = player_name_font.render(self.player_name,
-                                                       True, (0, 0, 0))
-            player_name_rect = player_name_font.get_rect()
-            self.win.blit(player_name_font,
-                          (512 - player_name_rect.center[0],
-                           686 - player_name_rect.center[1] / 2))
+            self.draw_keyboard()
+            self.draw_player_name()
 
             m_pos = pygame.mouse.get_pos()
 
@@ -126,7 +116,39 @@ class GameOver:
 
             pygame.display.update()
 
+    def draw_keyboard(self):
+        """
+        Stellt die Tastatur dar.
+        :return:
+        """
+        self.win.blit(self.backspace_button.get_symbol(),
+                      self.backspace_button.get_draw_pos())
+        self.win.blit(self.enter_button.get_symbol(),
+                      self.enter_button.get_draw_pos())
+        for char_button in self.char_buttons:
+            self.win.blit(char_button.get_symbol(),
+                          char_button.get_draw_pos())
+
+    def draw_player_name(self):
+        """
+        Stellt den eingegebenen Player-Tag dar.
+        :return:
+        """
+        player_name_font = pygame.font.Font("assets/orbitron-black.otf",
+                                            40)
+        player_name_font = player_name_font.render(self.player_name,
+                                                   True, (0, 0, 0))
+        player_name_rect = player_name_font.get_rect()
+        self.win.blit(player_name_font,
+                      (512 - player_name_rect.center[0],
+                       686 - player_name_rect.center[1] / 2))
+
     def add_char(self, char):
+        """
+        Fügt das zuletzt eingegebene Zeichen hinzu.
+        :param char:
+        :return:
+        """
         if len(self.player_name) == 0:
             self.enter_button.activate()
         if len(self.player_name) < 5:
@@ -136,6 +158,10 @@ class GameOver:
                 char_button.deactivate()
 
     def delete_char(self):
+        """
+        Entfernt das zuletzt eingegebene Zeichen.
+        :return:
+        """
         if len(self.player_name) > 0:
             self.player_name = self.player_name[:-1]
             for char_button in self.char_buttons:
@@ -144,6 +170,10 @@ class GameOver:
             self.enter_button.deactivate()
 
     def enter(self):
+        """
+        Übergibt den neuen Eintrag an die Bestenliste.
+        :return:
+        """
         self.main_menu.leaderboard.update_leaderboard(self.player_name,
                                                       self.score)
         self.main_menu.game_over()
