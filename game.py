@@ -11,6 +11,7 @@ from entities.towers.bomb import BombTower
 from menus.ingame_menu import IngameMenu
 from game_over import GameOver
 
+
 class Game:
 
     def __init__(self, win, main_menu):

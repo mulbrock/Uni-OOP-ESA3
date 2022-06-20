@@ -1,7 +1,10 @@
 from entities.enemies.enemy import Enemy
 
-class EnemyThree(Enemy):
 
+class EnemyThree(Enemy):
+    """
+    Mittlere Gegner-Klasse.
+    """
     def __init__(self, _path):
         symbol_path = "assets/img/enemies/enemy_3.png"
         hp = 25
