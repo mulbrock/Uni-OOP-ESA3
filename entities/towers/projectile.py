@@ -1,7 +1,11 @@
 import math
 from entities.entity import Entity
 
+
 class Projectile(Entity):
+    """
+    Klasse der Projektile, die von Bomb-Towers erzeugt werden.
+    """
 
     def __init__(self, starting_pos, dest_pos, attack_power, level):
         self.level = level
@@ -13,9 +17,18 @@ class Projectile(Entity):
         self.impacted = False
 
     def get_destination(self):
+        """
+        Liefert die Zielposition des Projektils.
+        :return: tupel: position
+        """
         return self.destination_pos
 
     def draw_projectile(self, win):
+        """
+        Zeichnet das Projektil auf das Window.
+        :param win: das aktuelle Window
+        :return:
+        """
         x1, y1 = self.get_center()
         x2, y2 = self.get_destination()
 
@@ -47,9 +60,18 @@ class Projectile(Entity):
                     self.impacted = True
 
     def is_impacted(self):
+        """
+        Wenn Zielposition erreich: True, wenn nicht: False.
+        :return: boolean
+        """
         return self.impacted
 
     def is_in_impact_range(self, pos):
+        """
+        Überprüft, ob die position in Reichweite des Einschlags ist.
+        :param pos: tupel
+        :return: boolean
+        """
         x1, y1 = pos
         x2, y2 = self.get_center()
 
@@ -60,9 +82,19 @@ class Projectile(Entity):
         return False
 
     def handle_impact(self, enemy_list):
+        """
+        Fügt Gegnern, die in Einschlagreichweite sind, Schaden zu.
+        :param enemy_list: list
+        :return:
+        """
         for enemy in enemy_list:
             if self.is_in_impact_range(enemy.get_center()):
                 enemy.lose_life(self.attack_power)
 
     def set_projectile_img_path(self, symbol_path):
+        """
+        Setzt den Pfad zum aktuellen Bild des Turms.
+        :param symbol_path: string
+        :return:
+        """
         self.set_symbol_path(symbol_path)
