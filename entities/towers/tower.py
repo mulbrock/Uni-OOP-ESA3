@@ -4,7 +4,7 @@ import math
 import re
 from entities.entity import Entity
 
-#########################################################################################
+
 class Tower(Entity):
 
     def __init__(self, _pos: tuple, _symbol_path, _range, _cool_down, _attack_power,
@@ -30,6 +30,11 @@ class Tower(Entity):
         self.active = False
 
     def is_in_range(self, pos):
+        """
+        Überprüft, ob die eingegebene Position in Reichweite ist.
+        :param pos:
+        :return:
+        """
         x1, y1 = pos
         x2, y2 = self.get_center()
 
@@ -41,7 +46,7 @@ class Tower(Entity):
 
     def set_aimed_enemy(self, enemy_list):
         """
-        Traverses enemy list. First enemy within range will get aimed at.
+        Durchläuft die eingegebene Liste mit Gegnern und visiert den ersten Gegner an, der in Reichweite ist.
         :param enemy_list:
         :return:
         """
@@ -54,6 +59,10 @@ class Tower(Entity):
         self.aimed_enemy = None
 
     def upgrade_range(self):
+        """
+        Erhöht die Reichweite und die Kosten, für diese Reichweitenerhöhung.
+        :return:
+        """
         if self.range_level < 10:
             self.range_upgrade_cost += 4 * self.fibonacci(self.range_level)
             self.range += 5
@@ -62,9 +71,17 @@ class Tower(Entity):
         return False
 
     def get_upgrade_range_cost(self):
+        """
+        Gibt die aktuellen Kosten für ein Upgrade der Reichweite zurück.
+        :return: einen integer-Wert der aktuellen Upgrade-Range-Kosten.
+        """
         return self.range_upgrade_cost
 
     def upgrade_power(self):
+        """
+        Erhöht die Stärke und die Kosten, für diese Erhöhung.
+        :return:
+        """
         if self.attack_power_level < 10:
             self.attack_power_upgrade_cost += 4 * self.fibonacci(self.attack_power_level)
             self.attack_power += 1
@@ -74,6 +91,10 @@ class Tower(Entity):
         return False
 
     def get_upgrade_power_cost(self):
+        """
+        Gibt die aktuellen Kosten für ein Power upgrade zurück.
+        :return: int
+        """
         return self.attack_power_upgrade_cost
 
     def upgrade_speed(self):
@@ -81,28 +102,53 @@ class Tower(Entity):
         pass
 
     def update_symbol(self):
-
+        """
+        Verändert das Aussehen eines Turms, abhängig von seine Power-Level
+        :return:
+        """
         path = self.get_symbol_path()
 
         new_symbol_path = re.sub("\d", str(self.attack_power_level), path)
         self.set_symbol_path(new_symbol_path)
 
     def get_upgrade_speed_cost(self):
+        """
+        Gibt die Kosten für Geschwindigkeits-Upgrades zurück.
+        :return: int
+        """
         return self.speed_upgrade_cost
 
     def draw_range(self, win):
+        """
+        Zeichnet einen Kreis um den Turm, mit dem Radius seiner Reichweite.
+        :param win:
+        :return:
+        """
         pygame.draw.circle(win, [0, 200, 200, 50], self.get_center(), self.range, 2)
 
     def get_range_level(self):
         return self.range_level
 
     def get_speed_level(self):
+        """
+        Liefert das Attack-Speed Level zurück.
+        :return: int
+        """
         return self.speed_level
 
     def get_power_level(self):
+        """
+        Liefert das Power Level zurück.
+        :return: int
+        """
         return self.attack_power_level
 
     def fibonacci(self, num):
+        """
+        Errechnet eine Fibonacci-Folge.
+        :param num:
+        :return:
+        """
         arr = [0, 1]
         if num == 1:
             return 1

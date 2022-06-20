@@ -19,6 +19,10 @@ class LaserTower(Tower):
         super().__init__(pos, _symbol_path, _range, _cool_down, _attack_power, _cost)
 
     def attack(self):
+        """
+        Fügt einem anvisierten Gegner Schaden zu.
+        :return:
+        """
         if self.active:
             if time.time() - self.timer >= self.cool_down_time:
                 self.timer = time.time()
@@ -27,6 +31,11 @@ class LaserTower(Tower):
         return False
 
     def draw_attack(self, win):
+        """
+        Zeichnet eine Linie vom Zentrum des Turms zum Zentrum des anvisierten Gegners.
+        :param win: das aktuelle Window
+        :return:
+        """
         if self.aimed_enemy is not None:
             enemy_pos = self.aimed_enemy.get_center()
             beam_origin_pos = self.get_center()
@@ -53,6 +62,10 @@ class LaserTower(Tower):
                 pygame.draw.line(win, (255, 0, 0), beam_origin_pos, enemy_pos, 13)
 
     def upgrade_speed(self):
+        """
+        Erhöht die Angriffsgeschwindigkeit.
+        :return: True, bei Erfolg. False falls nicht
+        """
         if self.speed_level < 10:
             self.speed_upgrade_cost += 4 * self.fibonacci(self.speed_level)
             self.cool_down_time -= 0.02
@@ -61,10 +74,22 @@ class LaserTower(Tower):
         return False
 
     def increase_cost(self):
+        """
+        Erhöht die Baukosten um 1.
+        :return:
+        """
         LaserTower.cost += 1
 
     def decrease_cost(self):
+        """
+        Verringert die Baukosten um 1.
+        :return:
+        """
         LaserTower.cost -= 1
 
     def redeem_coins(self):
+        """
+        Verringert die Baukosten um 1.
+        :return:
+        """
         return LaserTower.cost - 1
