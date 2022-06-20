@@ -3,6 +3,9 @@ from entities.towers.tower import Tower
 
 
 class BuildingArea:
+    """
+    Das Gebiet, in dem Gebaut werden kann.
+    """
 
     def __init__(self, area_number, _a, _b, _c, _d):
         self.number = area_number
@@ -21,9 +24,19 @@ class BuildingArea:
         self.buildings = list()
 
     def is_point_in_building_area(self, pos):
+        """
+        Überprüft, ob der Punkt in der Building area ist.
+        :param pos: tupel: int
+        :return: boolean
+        """
         return self.is_point_in_area(pos, self.area)
 
     def is_tower_in_building_area(self, tower: Tower):
+        """
+        Überprüft, ob der Turm in der Building area ist.
+        :param tower: Tower
+        :return: boolean
+        """
         area = tower.get_area()
         x1, y1 = area["A"]
         x2, y2 = area["C"]
@@ -34,6 +47,11 @@ class BuildingArea:
         return False
 
     def is_point_in_area(self, point, area):
+        """
+        Überprüft, ob der Punkt in der area ist.
+        :param point, area: tupel: int, area: dict
+        :return: boolean
+        """
         x, y = point
 
         xA, yA = area["A"]
@@ -46,6 +64,11 @@ class BuildingArea:
                 return True
 
     def is_building_space_empty(self, tower_to_build: Tower):
+        """
+        Überprüft, ob der beanspruchte Bauplatz frei ist.
+        :param tower_to_build: Tower
+        :return: boolean
+        """
         area = tower_to_build.get_area()
         a = area["A"]
         b = area["B"]
@@ -68,29 +91,58 @@ class BuildingArea:
         return True
 
     def add_building(self, tower: Tower, m_pos: tuple):
-        # x, y = m_pos
+        """
+        Fügt einen Turm zu einer Building area hinzu.
+        :param tower: Tower
+        :param m_pos: tuple: int
+        :return:
+        """
         tower.set_center(m_pos)
         self.buildings.append(tower)
 
     def get_image(self):
+        """
+        Liefert das Bild der Area.
+        :return: pygame.image
+        """
         return self.image
 
     def get_a(self):
+        """
+        Liefert den Punkt A.
+        :return:
+        """
         return self.A
 
     def get_buildings(self):
+        """
+        Liefert eine List der Gebäude in der Area.
+        :return: list: Tower
+        """
         return self.buildings
 
-    def get_number(self):
-        return self.number
-
     def has_tower(self, tower):
+        """
+        Überprüft, ob Turm in der Building area ist.
+        :param tower: Tower
+        :return: boolean
+        """
         for t in self.buildings:
             if t == tower:
                 return True
 
     def remove_tower(self, tower):
+        """
+        Entfernt einen Turm aus der Building area.
+        :param tower: Tower
+        :return:
+        """
         self.buildings.remove(tower)
 
     def hover_check(self, pos):
+        """
+        Überprüft, ob Mausposition in der Buildingarea ist.
+        :param pos: tuple: int
+        :return: boolean
+        """
         return self.is_point_in_building_area(pos)
