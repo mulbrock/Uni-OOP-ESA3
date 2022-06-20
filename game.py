@@ -1,3 +1,4 @@
+import math
 import time
 import pygame
 from pygame.locals import *
@@ -42,7 +43,7 @@ class Game:
         # Enemies
         self.timer = time.time()
         self.spawn_cool_down = 0.5
-        self.generate_enemies_cool_down = 5.0
+        self.generate_enemies_cool_down = 10.0
         self.all_enemies_killed = True
         self.enemies_to_enter = list()
         self.amount = 9
@@ -89,7 +90,7 @@ class Game:
                 self.main_menu.show_menu()
             else:
                 # Timer
-                clock.tick(60)
+                clock.tick(90)
                 self.win.blit(bg, (0, 0))
 
                 # Game Over
@@ -463,10 +464,7 @@ class Game:
                 self.game_map.add_enemy(enemy)
 
     def generate_enemies(self):
-        if self.wave < 5:
-            self.amount += self.wave
-        else:
-            self.amount += 5
+        self.amount = 9 + int(2 * math.pow(self.wave, 2))
 
         # 10 Enemies
         if self.wave == 1:
